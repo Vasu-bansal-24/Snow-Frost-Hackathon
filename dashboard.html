@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consent Tracker - Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+
+<body>
+    <div class="app">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <span class="logo-icon">🔒</span>
+                    <h1>Consent Tracker</h1>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-filter="all">
+                    <span class="nav-icon">📋</span>
+                    <span>All Consents</span>
+                    <span class="nav-count" id="count-all">0</span>
+                </a>
+                <div class="nav-divider"></div>
+                <div class="nav-label">Categories</div>
+                <a href="#" class="nav-item" data-filter="cookies">
+                    <span class="nav-icon">🍪</span>
+                    <span>Cookies</span>
+                    <span class="nav-count" id="count-cookies">0</span>
+                </a>
+                <a href="#" class="nav-item" data-filter="newsletter">
+                    <span class="nav-icon">📧</span>
+                    <span>Newsletter</span>
+                    <span class="nav-count" id="count-newsletter">0</span>
+                </a>
+                <a href="#" class="nav-item" data-filter="email">
+                    <span class="nav-icon">✉️</span>
+                    <span>Email</span>
+                    <span class="nav-count" id="count-email">0</span>
+                </a>
+                <a href="#" class="nav-item" data-filter="account">
+                    <span class="nav-icon">👤</span>
+                    <span>Account</span>
+                    <span class="nav-count" id="count-account">0</span>
+                </a>
+                <a href="#" class="nav-item" data-filter="data">
+                    <span class="nav-icon">📊</span>
+                    <span>Personal Data</span>
+                    <span class="nav-count" id="count-data">0</span>
+                </a>
+                <a href="#" class="nav-item" data-filter="notifications">
+                    <span class="nav-icon">🔔</span>
+                    <span>Notifications</span>
+                    <span class="nav-count" id="count-notifications">0</span>
+                </a>
+                <a href="#" class="nav-item" data-filter="location">
+                    <span class="nav-icon">📍</span>
+                    <span>Location</span>
+                    <span class="nav-count" id="count-location">0</span>
+                </a>
+                <a href="#" class="nav-item" data-filter="permissions">
+                    <span class="nav-icon">🔐</span>
+                    <span>Permissions</span>
+                    <span class="nav-count" id="count-permissions">0</span>
+                </a>
+                <a href="#" class="nav-item" data-filter="terms">
+                    <span class="nav-icon">📜</span>
+                    <span>Terms</span>
+                    <span class="nav-count" id="count-terms">0</span>
+                </a>
+                <a href="#" class="nav-item" data-filter="marketing">
+                    <span class="nav-icon">📢</span>
+                    <span>Marketing</span>
+                    <span class="nav-count" id="count-marketing">0</span>
+                </a>
+                <a href="#" class="nav-item" data-filter="general">
+                    <span class="nav-icon">📋</span>
+                    <span>General</span>
+                    <span class="nav-count" id="count-general">0</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="stats-card">
+                    <div class="stats-number" id="total-count">0</div>
+                    <div class="stats-label">Total Consents</div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="content-header">
+                <div class="header-left">
+                    <h2 id="page-title">All Consents</h2>
+                    <p class="subtitle">Track what you've agreed to across the web</p>
+                </div>
+                <div class="header-actions">
+                    <button id="export-btn" class="btn btn-secondary">
+                        <span>📤</span> Export
+                    </button>
+                    <button id="clear-btn" class="btn btn-danger">
+                        <span>🗑️</span> Clear All
+                    </button>
+                </div>
+            </header>
+
+            <!-- Statistics Cards -->
+            <div class="stats-grid" id="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-card-icon">🌐</div>
+                    <div class="stat-card-content">
+                        <div class="stat-card-value" id="stat-sites">0</div>
+                        <div class="stat-card-label">Websites</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon">📅</div>
+                    <div class="stat-card-content">
+                        <div class="stat-card-value" id="stat-today">0</div>
+                        <div class="stat-card-label">Today</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon">📧</div>
+                    <div class="stat-card-content">
+                        <div class="stat-card-value" id="stat-emails">0</div>
+                        <div class="stat-card-label">Emails Shared</div>
+                    </div>
+                </div>
+                <div class="stat-card risk-card" id="risk-card">
+                    <div class="stat-card-icon">🛡️</div>
+                    <div class="stat-card-content">
+                        <div class="stat-card-value" id="stat-risk">Low</div>
+                        <div class="stat-card-label">Privacy Risk</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search and Filters -->
+            <div class="search-bar">
+                <div class="search-input-wrapper">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="search-input" class="search-input"
+                        placeholder="Search by website or keyword...">
+                </div>
+                <div class="date-filter">
+                    <select id="date-filter" class="filter-select">
+                        <option value="all">All Time</option>
+                        <option value="today">Today</option>
+                        <option value="week">This Week</option>
+                        <option value="month">This Month</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Top Sites -->
+            <div class="top-sites-section" id="top-sites-section">
+                <h3 class="section-title">Top Sites by Consents</h3>
+                <div class="top-sites" id="top-sites">
+                    <!-- Dynamically populated -->
+                </div>
+            </div>
+
+            <!-- Consent List -->
+            <div class="consent-container">
+                <h3 class="section-title" id="list-title">Recent Consents</h3>
+                <div id="consent-list" class="consent-list">
+                    <!-- Consents will be dynamically added here -->
+                </div>
+
+                <!-- Empty State -->
+                <div id="empty-state" class="empty-state hidden">
+                    <div class="empty-icon">🔍</div>
+                    <h3>No Consents Found</h3>
+                    <p>No consents match your current filter. Try selecting "All Consents" or browse more websites.</p>
+                </div>
+
+                <!-- Loading State -->
+                <div id="loading-state" class="loading-state hidden">
+                    <div class="loading-spinner"></div>
+                    <p>Loading consents...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Confirm Modal -->
+    <div id="confirm-modal" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-icon">⚠️</div>
+            <h3>Clear All Consents?</h3>
+            <p>This will permanently delete all <span id="clear-count">0</span> tracked consent records. This action
+                cannot be undone.</p>
+            <div class="modal-buttons">
+                <button id="cancel-clear" class="btn btn-secondary">Cancel</button>
+                <button id="confirm-clear" class="btn btn-danger">Clear All</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Modal -->
+    <div id="export-modal" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-icon">📤</div>
+            <h3>Export Consent Data</h3>
+            <p>Choose your preferred export format:</p>
+            <div class="export-options">
+                <button id="export-json" class="export-option">
+                    <span class="export-option-icon">📄</span>
+                    <span class="export-option-label">JSON</span>
+                    <span class="export-option-desc">Full data export</span>
+                </button>
+                <button id="export-csv" class="export-option">
+                    <span class="export-option-icon">📊</span>
+                    <span class="export-option-label">CSV</span>
+                    <span class="export-option-desc">Spreadsheet format</span>
+                </button>
+            </div>
+            <button id="cancel-export" class="btn btn-secondary btn-full">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="dashboard.js"></script>
+</body>
+
+</html>
