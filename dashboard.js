@@ -26,11 +26,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const topSitesContainer = document.getElementById('top-sites');
     const topSitesSection = document.getElementById('top-sites-section');
     const riskCard = document.getElementById('risk-card');
+    const viewToggleButtons = document.querySelectorAll('.toggle-btn');
+    const privacyLink = document.getElementById('privacy-link');
+    const retentionLink = document.getElementById('retention-link');
+    const moreToggle = document.getElementById('more-toggle');
+    const moreGroup = document.getElementById('more-group');
+    const settingsBtn = document.getElementById('settings-btn');
+    const settingsModal = document.getElementById('settings-modal');
+    const closeSettings = document.getElementById('close-settings');
+    const saveSettings = document.getElementById('save-settings');
+    const retentionSelect = document.getElementById('retention-select');
 
     let allConsents = [];
     let currentFilter = 'all';
     let searchQuery = '';
     let dateRange = 'all';
+    let viewMode = 'recent'; // recent | all
+    let settings = { retentionDays: 'never' };
 
     // Category display info
     const categoryInfo = {
@@ -53,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
     consentList.classList.add('hidden');
 
     // Load consents on page load
-    loadConsents();
+    loadSettings().then(loadConsents);
 
     // Listen for storage changes (real-time updates)
     chrome.storage.onChanged.addListener((changes, namespace) => {
@@ -86,6 +98,64 @@ document.addEventListener('DOMContentLoaded', () => {
     cancelClear.addEventListener('click', () => confirmModal.classList.add('hidden'));
     confirmClear.addEventListener('click', clearAllConsents);
 
+    // View toggle (Recent / All)
+    viewToggleButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            viewMode = btn.dataset.view;
+            viewToggleButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderConsents();
+        });
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+        const isTyping = ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName) || document.activeElement.isContentEditable;
+        if (e.key === '/' && !isTyping) {
+            e.preventDefault();
+            searchInput.focus();
+        }
+        if (e.key === 'Escape') {
+            confirmModal.classList.add('hidden');
+            exportModal.classList.add('hidden');
+            settingsModal.classList.add('hidden');
+        }
+    });
+
+    // Privacy links
+    if (privacyLink) {
+        privacyLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            showToast('Data stays local. No cloud sync used.', 'success');
+        });
+    }
+    if (retentionLink) {
+        retentionLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            settingsModal.classList.remove('hidden');
+        });
+    }
+
+    if (moreToggle) {
+        moreToggle.querySelector('.more-button').addEventListener('click', () => {
+            moreGroup.classList.toggle('open');
+            moreToggle.classList.toggle('open');
+        });
+    }
+
+    settingsBtn?.addEventListener('click', () => settingsModal.classList.remove('hidden'));
+    closeSettings?.addEventListener('click', () => settingsModal.classList.add('hidden'));
+    saveSettings?.addEventListener('click', () => {
+        const value = retentionSelect.value;
+        settings.retentionDays = value;
+        chrome.storage.local.set({ settings }, () => {
+            applyRetention();
+            settingsModal.classList.add('hidden');
+            showToast('Preferences saved', 'success');
+            updateAll();
+        });
+    });
+
     // Close modals on overlay click
     confirmModal.addEventListener('click', (e) => {
         if (e.target === confirmModal) confirmModal.classList.add('hidden');
@@ -106,17 +176,43 @@ document.addEventListener('DOMContentLoaded', () => {
 
             currentFilter = filter;
             pageTitle.textContent = categoryInfo[filter]?.title || 'Consents';
+            const hasCategoryConsents = currentFilter === 'all' || allConsents.some(c => c.category === currentFilter);
+            if (!hasCategoryConsents) {
+                consentList.innerHTML = '';
+                consentList.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                listTitle.textContent = `${categoryInfo[currentFilter]?.title || 'Consents'} (0)`;
+                return;
+            }
+
             renderConsents();
         });
     });
 
     // Load consents from storage
-    function loadConsents() {
-        chrome.storage.local.get(['consents'], (result) => {
-            allConsents = result.consents || [];
-            loadingState.classList.add('hidden');
-            updateAll();
+    function loadSettings() {
+        return new Promise((resolve) => {
+            chrome.storage.local.get(['settings'], (result) => {
+                settings = { retentionDays: 'never', ...(result.settings || {}) };
+                if (retentionSelect) retentionSelect.value = settings.retentionDays;
+                resolve();
+            });
         });
+    }
+
+    function loadConsents() {
+        try {
+            chrome.storage.local.get(['consents'], (result) => {
+                allConsents = result.consents || [];
+                applyRetention();
+                loadingState.classList.add('hidden');
+                updateAll();
+            });
+        } catch (err) {
+            loadingState.classList.add('hidden');
+            showToast('Could not load consents. Please reload the extension.', 'error');
+            console.error('Load consents error', err);
+        }
     }
 
     // Update everything
@@ -157,19 +253,41 @@ document.addEventListener('DOMContentLoaded', () => {
         const uniqueSites = new Set(allConsents.map(c => c.domain)).size;
         document.getElementById('stat-sites').textContent = uniqueSites;
 
+        const yesterdayStart = new Date();
+        yesterdayStart.setHours(0, 0, 0, 0);
+        yesterdayStart.setDate(yesterdayStart.getDate() - 1);
+        const yesterdayEnd = new Date();
+        yesterdayEnd.setHours(0, 0, 0, 0);
+
+        const yesterdayCount = allConsents.filter(c => c.timestamp >= yesterdayStart.getTime() && c.timestamp < yesterdayEnd.getTime()).length;
+        const todayDelta = diffLabel(allConsents.filter(c => c.timestamp >= yesterdayEnd.getTime()).length, yesterdayCount);
+        setDelta('delta-today', todayDelta);
+
+        const lastWeekStart = new Date();
+        lastWeekStart.setDate(lastWeekStart.getDate() - 7);
+        const weekBeforeStart = new Date();
+        weekBeforeStart.setDate(weekBeforeStart.getDate() - 14);
+        const lastWeek = allConsents.filter(c => c.timestamp >= lastWeekStart.getTime());
+        const prevWeek = allConsents.filter(c => c.timestamp >= weekBeforeStart.getTime() && c.timestamp < lastWeekStart.getTime());
+        setDelta('delta-sites', diffLabel(lastWeek.length, prevWeek.length));
+
         // Today's count
         const today = new Date().setHours(0, 0, 0, 0);
         const todayCount = allConsents.filter(c => c.timestamp >= today).length;
         document.getElementById('stat-today').textContent = todayCount;
+        setBar('bar-today', todayCount, Math.max(todayCount, yesterdayCount || 1));
 
         // Emails shared
         const emailsShared = allConsents.filter(c => c.emailShared).length;
         document.getElementById('stat-emails').textContent = emailsShared;
+        const prevEmails = prevWeek.filter(c => c.emailShared).length;
+        setDelta('delta-emails', diffLabel(emailsShared, prevEmails));
 
         // Privacy risk calculation
         const riskScore = calculateRiskScore();
         const riskLabel = riskScore < 3 ? 'Low' : riskScore < 7 ? 'Medium' : 'High';
         document.getElementById('stat-risk').textContent = riskLabel;
+        setDelta('delta-risk', riskLabel);
 
         riskCard.classList.remove('medium', 'high');
         if (riskScore >= 3 && riskScore < 7) riskCard.classList.add('medium');
@@ -286,9 +404,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Update list title
+        const baseTitle = viewMode === 'recent' ? 'Recent Consents' : 'All Consents';
         listTitle.textContent = searchQuery
             ? `Search Results (${filtered.length})`
-            : `Recent Consents (${filtered.length})`;
+            : `${baseTitle} (${filtered.length})`;
 
         if (filtered.length === 0) {
             consentList.classList.add('hidden');
@@ -299,6 +418,10 @@ document.addEventListener('DOMContentLoaded', () => {
         consentList.classList.remove('hidden');
         emptyState.classList.add('hidden');
 
+        if (viewMode === 'recent') {
+            filtered = filtered.slice(0, 15);
+        }
+
         consentList.innerHTML = filtered.map((consent, index) =>
             createConsentCard(consent, index)
         ).join('');
@@ -308,6 +431,18 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.addEventListener('click', (e) => {
                 const id = e.currentTarget.dataset.id;
                 deleteConsent(id);
+            });
+        });
+        consentList.querySelectorAll('.action-btn-review').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const id = e.currentTarget.dataset.id;
+                toggleFlag(id, 'reviewed');
+            });
+        });
+        consentList.querySelectorAll('.action-btn-pin').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const id = e.currentTarget.dataset.id;
+                toggleFlag(id, 'important');
             });
         });
     }
@@ -351,12 +486,21 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="consent-footer">
           <span class="consent-time">🕐 ${time}</span>
           <div class="consent-actions">
-            <a href="${escapeHtml(consent.url)}" target="_blank" rel="noopener" class="action-btn action-btn-visit">
-              🔗 Visit
-            </a>
-            <button class="action-btn action-btn-delete" data-id="${consent.id}">
-              🗑️
-            </button>
+                        <a href="${escapeHtml(consent.url)}" target="_blank" rel="noopener" class="action-btn action-btn-visit">
+                            <svg class="icon" aria-hidden="true"><use href="#icon-link"></use></svg>
+                            Visit
+                        </a>
+                        <button class="action-btn action-btn-review${consent.reviewed ? ' active' : ''}" data-id="${consent.id}">
+                            <svg class="icon" aria-hidden="true"><use href="#icon-flag"></use></svg>
+                            Reviewed
+                        </button>
+                        <button class="action-btn action-btn-pin${consent.important ? ' active' : ''}" data-id="${consent.id}">
+                            <svg class="icon" aria-hidden="true"><use href="#icon-star"></use></svg>
+                            Important
+                        </button>
+                        <button class="action-btn action-btn-delete" data-id="${consent.id}">
+                            <svg class="icon" aria-hidden="true"><use href="#icon-trash"></use></svg>
+                        </button>
           </div>
         </div>
       </div>
@@ -396,6 +540,23 @@ document.addEventListener('DOMContentLoaded', () => {
             updateAll();
             showToast('Consent deleted', 'success');
         });
+    }
+
+    function toggleFlag(id, key) {
+        let changed = false;
+        allConsents = allConsents.map(c => {
+            if (c.id === id) {
+                changed = true;
+                return { ...c, [key]: !c[key] };
+            }
+            return c;
+        });
+        if (changed) {
+            chrome.storage.local.set({ consents: allConsents }, () => {
+                updateAll();
+                showToast(key === 'reviewed' ? 'Marked as reviewed' : 'Marked as important', 'success');
+            });
+        }
     }
 
     // Clear all consents
@@ -481,7 +642,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Show toast notification
-    function showToast(message, type = 'success') {
+        function showToast(message, type = 'success') {
         const toast = document.createElement('div');
         toast.className = `toast ${type}`;
         toast.innerHTML = `
@@ -531,6 +692,38 @@ document.addEventListener('DOMContentLoaded', () => {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
+    }
+
+    function setDelta(id, label) {
+        const el = document.getElementById(id);
+        if (el) el.textContent = label;
+    }
+
+    function diffLabel(current, prev) {
+        if (prev === 0 && current === 0) return 'No change';
+        if (prev === 0) return `↑ ${current}`;
+        const diff = current - prev;
+        const arrow = diff > 0 ? '↑' : diff < 0 ? '↓' : '•';
+        return `${arrow} ${Math.abs(diff)} vs prev`;
+    }
+
+    function setBar(id, value, max) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const width = Math.max(8, Math.min(100, Math.round((value / (max || 1)) * 100)));
+        el.style.width = `${width}%`;
+    }
+
+    function applyRetention() {
+        if (!settings || settings.retentionDays === 'never') return;
+        const days = parseInt(settings.retentionDays, 10);
+        if (Number.isNaN(days)) return;
+        const cutoff = Date.now() - days * 86400000;
+        const pruned = allConsents.filter(c => c.timestamp >= cutoff);
+        if (pruned.length !== allConsents.length) {
+            allConsents = pruned;
+            chrome.storage.local.set({ consents: allConsents });
+        }
     }
 
     // Debounce function

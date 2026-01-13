@@ -9,84 +9,204 @@
 </head>
 
 <body>
+    <!-- Icon sprite (Lucide-inspired minimal set) -->
+    <svg width="0" height="0" style="position:absolute;">
+        <defs>
+            <symbol id="icon-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="5" y="11" width="14" height="10" rx="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </symbol>
+            <symbol id="icon-list" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="8" y1="6" x2="21" y2="6"></line>
+                <line x1="8" y1="12" x2="21" y2="12"></line>
+                <line x1="8" y1="18" x2="21" y2="18"></line>
+                <circle cx="4" cy="6" r="1"></circle>
+                <circle cx="4" cy="12" r="1"></circle>
+                <circle cx="4" cy="18" r="1"></circle>
+            </symbol>
+            <symbol id="icon-cookie" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 10a8 8 0 1 1-8-8 3 3 0 0 0 3 3 3 3 0 0 0 3 3 3 3 0 0 0 2 2Z"></path>
+                <circle cx="12" cy="12" r="1"></circle>
+                <circle cx="8" cy="10" r="1"></circle>
+                <circle cx="12" cy="16" r="1"></circle>
+                <circle cx="16" cy="14" r="1"></circle>
+            </symbol>
+            <symbol id="icon-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+                <polyline points="3 7 12 13 21 7"></polyline>
+            </symbol>
+            <symbol id="icon-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 21a8 8 0 1 1 16 0"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+            </symbol>
+            <symbol id="icon-database" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+                <path d="M3 5v14c0 1.7 4 3 9 3s9-1.3 9-3V5"></path>
+            </symbol>
+            <symbol id="icon-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            </symbol>
+            <symbol id="icon-map-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 1 1 18 0Z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+            </symbol>
+            <symbol id="icon-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path>
+            </symbol>
+            <symbol id="icon-megaphone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 11v2a1 1 0 0 0 1 1h2l4 5v-7h3a6 6 0 0 0 6-6V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2Z"></path>
+            </symbol>
+            <symbol id="icon-file-text" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"></path>
+                <path d="M14 2v6h6"></path>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <line x1="10" y1="9" x2="8" y2="9"></line>
+            </symbol>
+            <symbol id="icon-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+                <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+            </symbol>
+            <symbol id="icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+            </symbol>
+            <symbol id="icon-mail-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-6 9 6"></path>
+                <path d="M21 9v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9"></path>
+                <path d="m3 9 9 6 9-6"></path>
+            </symbol>
+            <symbol id="icon-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </symbol>
+            <symbol id="icon-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path>
+                <path d="M10 11v6"></path>
+                <path d="M14 11v6"></path>
+                <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path>
+            </symbol>
+            <symbol id="icon-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+            </symbol>
+            <symbol id="icon-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10 13a5 5 0 0 0 7.54.54l2-2a5 5 0 0 0-7.07-7.07l-1.5 1.5"></path>
+                <path d="M14 11a5 5 0 0 0-7.54-.54l-2 2a5 5 0 1 0 7.07 7.07l1.5-1.5"></path>
+            </symbol>
+            <symbol id="icon-flag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 15s1-1 4-1 5 2 8 2a7 7 0 0 0 4-1V5a7 7 0 0 1-4 1c-3 0-5-2-8-2S4 5 4 5Z"></path>
+                <line x1="4" y1="22" x2="4" y2="15"></line>
+            </symbol>
+            <symbol id="icon-star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="12 2 15 8.5 22 9 17 14 18.5 21 12 17.5 5.5 21 7 14 2 9 9 8.5 12 2"></polygon>
+            </symbol>
+            <symbol id="icon-settings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 8 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 8 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9c.33.52.52 1.12.51 1.74V11a1.65 1.65 0 0 0 1.51 1Z"></path>
+            </symbol>
+            <symbol id="icon-chevron-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+            </symbol>
+        </defs>
+    </svg>
     <div class="app">
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">
                 <div class="logo">
-                    <span class="logo-icon">🔒</span>
+                    <svg class="logo-icon" aria-hidden="true"><use href="#icon-lock"></use></svg>
                     <h1>Consent Tracker</h1>
                 </div>
             </div>
             <nav class="sidebar-nav">
                 <a href="#" class="nav-item active" data-filter="all">
-                    <span class="nav-icon">📋</span>
+                    <svg class="nav-icon" aria-hidden="true"><use href="#icon-list"></use></svg>
                     <span>All Consents</span>
                     <span class="nav-count" id="count-all">0</span>
                 </a>
                 <div class="nav-divider"></div>
                 <div class="nav-label">Categories</div>
                 <a href="#" class="nav-item" data-filter="cookies">
-                    <span class="nav-icon">🍪</span>
+                    <svg class="nav-icon" aria-hidden="true"><use href="#icon-cookie"></use></svg>
                     <span>Cookies</span>
                     <span class="nav-count" id="count-cookies">0</span>
                 </a>
                 <a href="#" class="nav-item" data-filter="newsletter">
-                    <span class="nav-icon">📧</span>
+                    <svg class="nav-icon" aria-hidden="true"><use href="#icon-mail-open"></use></svg>
                     <span>Newsletter</span>
                     <span class="nav-count" id="count-newsletter">0</span>
                 </a>
                 <a href="#" class="nav-item" data-filter="email">
-                    <span class="nav-icon">✉️</span>
+                    <svg class="nav-icon" aria-hidden="true"><use href="#icon-mail"></use></svg>
                     <span>Email</span>
                     <span class="nav-count" id="count-email">0</span>
                 </a>
                 <a href="#" class="nav-item" data-filter="account">
-                    <span class="nav-icon">👤</span>
+                    <svg class="nav-icon" aria-hidden="true"><use href="#icon-user"></use></svg>
                     <span>Account</span>
                     <span class="nav-count" id="count-account">0</span>
                 </a>
                 <a href="#" class="nav-item" data-filter="data">
-                    <span class="nav-icon">📊</span>
+                    <svg class="nav-icon" aria-hidden="true"><use href="#icon-database"></use></svg>
                     <span>Personal Data</span>
                     <span class="nav-count" id="count-data">0</span>
                 </a>
-                <a href="#" class="nav-item" data-filter="notifications">
-                    <span class="nav-icon">🔔</span>
-                    <span>Notifications</span>
-                    <span class="nav-count" id="count-notifications">0</span>
-                </a>
-                <a href="#" class="nav-item" data-filter="location">
-                    <span class="nav-icon">📍</span>
-                    <span>Location</span>
-                    <span class="nav-count" id="count-location">0</span>
-                </a>
-                <a href="#" class="nav-item" data-filter="permissions">
-                    <span class="nav-icon">🔐</span>
-                    <span>Permissions</span>
-                    <span class="nav-count" id="count-permissions">0</span>
-                </a>
-                <a href="#" class="nav-item" data-filter="terms">
-                    <span class="nav-icon">📜</span>
-                    <span>Terms</span>
-                    <span class="nav-count" id="count-terms">0</span>
-                </a>
-                <a href="#" class="nav-item" data-filter="marketing">
-                    <span class="nav-icon">📢</span>
-                    <span>Marketing</span>
-                    <span class="nav-count" id="count-marketing">0</span>
-                </a>
-                <a href="#" class="nav-item" data-filter="general">
-                    <span class="nav-icon">📋</span>
-                    <span>General</span>
-                    <span class="nav-count" id="count-general">0</span>
-                </a>
+                <div class="more-toggle" id="more-toggle">
+                    <button class="nav-item more-button" type="button">
+                        <svg class="nav-icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
+                        <span>More</span>
+                    </button>
+                    <div class="more-group" id="more-group">
+                        <a href="#" class="nav-item" data-filter="notifications">
+                            <svg class="nav-icon" aria-hidden="true"><use href="#icon-bell"></use></svg>
+                            <span>Notifications</span>
+                            <span class="nav-count" id="count-notifications">0</span>
+                        </a>
+                        <a href="#" class="nav-item" data-filter="location">
+                            <svg class="nav-icon" aria-hidden="true"><use href="#icon-map-pin"></use></svg>
+                            <span>Location</span>
+                            <span class="nav-count" id="count-location">0</span>
+                        </a>
+                        <a href="#" class="nav-item" data-filter="permissions">
+                            <svg class="nav-icon" aria-hidden="true"><use href="#icon-shield"></use></svg>
+                            <span>Permissions</span>
+                            <span class="nav-count" id="count-permissions">0</span>
+                        </a>
+                        <a href="#" class="nav-item" data-filter="terms">
+                            <svg class="nav-icon" aria-hidden="true"><use href="#icon-file-text"></use></svg>
+                            <span>Terms</span>
+                            <span class="nav-count" id="count-terms">0</span>
+                        </a>
+                        <a href="#" class="nav-item" data-filter="marketing">
+                            <svg class="nav-icon" aria-hidden="true"><use href="#icon-megaphone"></use></svg>
+                            <span>Marketing</span>
+                            <span class="nav-count" id="count-marketing">0</span>
+                        </a>
+                        <a href="#" class="nav-item" data-filter="general">
+                            <svg class="nav-icon" aria-hidden="true"><use href="#icon-list"></use></svg>
+                            <span>General</span>
+                            <span class="nav-count" id="count-general">0</span>
+                        </a>
+                    </div>
+                </div>
             </nav>
             <div class="sidebar-footer">
                 <div class="stats-card">
                     <div class="stats-number" id="total-count">0</div>
                     <div class="stats-label">Total Consents</div>
                 </div>
+                <button id="settings-btn" class="btn btn-secondary btn-full" type="button">
+                    <svg class="nav-icon" aria-hidden="true"><use href="#icon-settings"></use></svg>
+                    Settings
+                </button>
             </div>
         </aside>
 
@@ -96,46 +216,51 @@
             <header class="content-header">
                 <div class="header-left">
                     <h2 id="page-title">All Consents</h2>
-                    <p class="subtitle">Track what you've agreed to across the web</p>
+                    <p class="subtitle">See exactly what you've said yes to.</p>
                 </div>
                 <div class="header-actions">
                     <button id="export-btn" class="btn btn-secondary">
-                        <span>📤</span> Export
+                        <span aria-hidden="true">📤</span> Export
                     </button>
-                    <button id="clear-btn" class="btn btn-danger">
-                        <span>🗑️</span> Clear All
+                    <button id="clear-btn" class="btn btn-ghost-danger" aria-label="Clear all consents">
+                        <span aria-hidden="true">🗑️</span> Clear All
                     </button>
                 </div>
             </header>
 
             <!-- Statistics Cards -->
             <div class="stats-grid" id="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-card-icon">🌐</div>
+                <div class="stat-card horizontal">
+                    <div class="stat-card-icon"><svg class="icon" aria-hidden="true"><use href="#icon-grid"></use></svg></div>
                     <div class="stat-card-content">
                         <div class="stat-card-value" id="stat-sites">0</div>
                         <div class="stat-card-label">Websites</div>
+                        <div class="stat-delta" id="delta-sites">–</div>
                     </div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-card-icon">📅</div>
+                <div class="stat-card vertical">
+                    <div class="stat-card-icon"><svg class="icon" aria-hidden="true"><use href="#icon-calendar"></use></svg></div>
                     <div class="stat-card-content">
                         <div class="stat-card-value" id="stat-today">0</div>
                         <div class="stat-card-label">Today</div>
+                        <div class="stat-mini-bar"><span class="bar" id="bar-today"></span></div>
+                        <div class="stat-delta" id="delta-today">–</div>
                     </div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-card-icon">📧</div>
+                    <div class="stat-card horizontal">
+                    <div class="stat-card-icon"><svg class="icon" aria-hidden="true"><use href="#icon-mail"></use></svg></div>
                     <div class="stat-card-content">
                         <div class="stat-card-value" id="stat-emails">0</div>
                         <div class="stat-card-label">Emails Shared</div>
+                        <div class="stat-delta" id="delta-emails">–</div>
                     </div>
                 </div>
-                <div class="stat-card risk-card" id="risk-card">
-                    <div class="stat-card-icon">🛡️</div>
+                <div class="stat-card risk-card vertical" id="risk-card">
+                    <div class="stat-card-icon"><svg class="icon" aria-hidden="true"><use href="#icon-shield"></use></svg></div>
                     <div class="stat-card-content">
                         <div class="stat-card-value" id="stat-risk">Low</div>
                         <div class="stat-card-label">Privacy Risk</div>
+                        <div class="stat-delta" id="delta-risk">–</div>
                     </div>
                 </div>
             </div>
@@ -143,9 +268,13 @@
             <!-- Search and Filters -->
             <div class="search-bar">
                 <div class="search-input-wrapper">
-                    <span class="search-icon">🔍</span>
+                    <span class="search-icon" aria-hidden="true">🔍</span>
                     <input type="text" id="search-input" class="search-input"
-                        placeholder="Search by website or keyword...">
+                        placeholder="Type to search ( / to focus )">
+                </div>
+                <div class="view-toggle" role="group" aria-label="View range">
+                    <button class="toggle-btn active" data-view="recent">Recent</button>
+                    <button class="toggle-btn" data-view="all">All</button>
                 </div>
                 <div class="date-filter">
                     <select id="date-filter" class="filter-select">
@@ -155,6 +284,10 @@
                         <option value="month">This Month</option>
                     </select>
                 </div>
+            </div>
+
+            <div class="privacy-note">
+                Your data never leaves this browser. <a href="#" id="privacy-link">Privacy policy</a> · Manage <a href="#" id="retention-link">retention</a>
             </div>
 
             <!-- Top Sites -->
@@ -174,14 +307,27 @@
 
                 <!-- Empty State -->
                 <div id="empty-state" class="empty-state hidden">
-                    <div class="empty-icon">🔍</div>
-                    <h3>No Consents Found</h3>
-                    <p>No consents match your current filter. Try selecting "All Consents" or browse more websites.</p>
+                    <div class="empty-illustration" aria-hidden="true">
+                        <svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="20" y="30" width="160" height="70" rx="12" fill="#0f1f3a" stroke="#3b82f6" stroke-width="2" opacity="0.5" />
+                            <rect x="35" y="45" width="70" height="8" rx="4" fill="#3b82f6" opacity="0.5" />
+                            <rect x="35" y="60" width="110" height="8" rx="4" fill="#cbd5f5" opacity="0.4" />
+                            <rect x="35" y="75" width="90" height="8" rx="4" fill="#cbd5f5" opacity="0.25" />
+                            <circle cx="150" cy="55" r="12" stroke="#f59e0b" stroke-width="2" fill="none" />
+                            <path d="M156 61l6 6" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" />
+                        </svg>
+                    </div>
+                    <h3>No consents yet</h3>
+                    <p>Browse and interact—everything you say yes to will show up here. Use the filters or add a site manually.</p>
                 </div>
 
                 <!-- Loading State -->
                 <div id="loading-state" class="loading-state hidden">
-                    <div class="loading-spinner"></div>
+                    <div class="skeleton-list">
+                        <div class="skeleton-card"></div>
+                        <div class="skeleton-card"></div>
+                        <div class="skeleton-card short"></div>
+                    </div>
                     <p>Loading consents...</p>
                 </div>
             </div>
@@ -199,7 +345,6 @@
                 <button id="cancel-clear" class="btn btn-secondary">Cancel</button>
                 <button id="confirm-clear" class="btn btn-danger">Clear All</button>
             </div>
-        </div>
     </div>
 
     <!-- Export Modal -->
@@ -221,6 +366,30 @@
                 </button>
             </div>
             <button id="cancel-export" class="btn btn-secondary btn-full">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-icon">⚙️</div>
+            <h3>Preferences</h3>
+            <p>Control how your consent data is kept locally.</p>
+            <div class="settings-group">
+                <label for="retention-select">Data retention</label>
+                <select id="retention-select" class="filter-select">
+                    <option value="never">Keep forever</option>
+                    <option value="365">12 months</option>
+                    <option value="180">6 months</option>
+                    <option value="90">3 months</option>
+                    <option value="30">30 days</option>
+                </select>
+                <small class="hint">Older records are removed automatically when you change this.</small>
+            </div>
+            <div class="modal-buttons">
+                <button id="close-settings" class="btn btn-secondary">Close</button>
+                <button id="save-settings" class="btn btn-secondary">Save</button>
+            </div>
         </div>
     </div>
 
