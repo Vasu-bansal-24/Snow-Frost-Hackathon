@@ -44,11 +44,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const recent = consents.slice(0, 3);
             recentList.innerHTML = recent.map(c => createRecentItem(c)).join('');
         } else {
-            recentSection.innerHTML = `
-        <div class="no-consents">
-          <p>No consents tracked yet.<br>Browse the web to start logging.</p>
-        </div>
-      `;
+            recentList.innerHTML = `
+                <div class="empty-state" style="padding:16px;text-align:center;">
+                    <p style="margin:0;color:var(--color-medium-teal);">No consents tracked yet.<br>Browse the web to start logging.</p>
+                </div>
+            `;
         }
     });
 

@@ -4,25 +4,33 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-    --primary: #667eea;
-    --primary-dark: #5a67d8;
-    --secondary: #764ba2;
-    --accent: #f093fb;
-    --bg-dark: #FDFBD4;
-    --bg-sidebar: #37392E;
-    --bg-card: #E78F8E;
-    --bg-card-hover: rgba(35, 35, 55, 0.95);
+    /* New Coolors Palette */
+    --color-black: #000000;
+    --color-dark-teal: #2F4550;
+    --color-medium-teal: #586F7C;
+    --color-light-mint: #B8DBD9;
+    --color-off-white: #F5F3EB;
+
+    /* Mapped to existing variables */
+    --primary: #2F4550;
+    --primary-dark: #1e2d35;
+    --secondary: #586F7C;
+    --accent: #B8DBD9;
+    --bg-dark: #F5F3EB;
+    --bg-sidebar: #2F4550;
+    --bg-card: #B8DBD9;
+    --bg-card-hover: rgba(184, 219, 217, 0.85);
     --text-primary: #000000;
-    --text-secondary: #FDFBD4;
-    --text-muted: rgba(255, 255, 255, 0.5);
-    --border: rgba(255, 255, 255, 0.08);
-    --danger: #ef4444;
-    --success: #10b981;
-    --warning: #f59e0b;
-    --info: #3b82f6;
+    --text-secondary: #2F4550;
+    --text-muted: #586F7C;
+    --border: rgba(47, 69, 80, 0.15);
+    --danger: #dc3545;
+    --success: #28a745;
+    --warning: #ffc107;
+    --info: #586F7C;
     --radius: 16px;
     --radius-sm: 10px;
-    --shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+    --shadow: 0 4px 24px rgba(47, 69, 80, 0.2);
 }
 
 * {
@@ -88,7 +96,7 @@ body {
 .logo h1 {
     font-size: 16px;
     font-weight: 700;
-    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+    background: linear-gradient(135deg, var(--color-light-mint) 0%, #ffffff 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -123,7 +131,7 @@ body {
     gap: 4px;
     padding: 1px 12px;
     border-radius: var(--radius-sm);
-    color: var(--text-secondary);
+    color: var(--color-light-mint);
     text-decoration: none;
     transition: all 0.2s ease;
     margin-bottom: 1px;
@@ -132,13 +140,13 @@ body {
 }
 
 .nav-item:hover {
-    background: rgba(255, 255, 255, 0.05);
-    color: var(--text-primary);
+    background: rgba(184, 219, 217, 0.15);
+    color: #ffffff;
 }
 
 .nav-item.active {
-    background: linear-gradient(135deg, rgba(0, 0, 0, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
-    color: var(--primary);
+    background: linear-gradient(135deg, rgba(184, 219, 217, 0.2) 0%, rgba(88, 111, 124, 0.2) 100%);
+    color: var(--color-light-mint);
 }
 
 .more-toggle {
@@ -177,16 +185,18 @@ body {
 
 .nav-count {
     margin-left: auto;
-    background: rgba(255, 255, 255, 0.1);
-    padding: 2px 6px;
-    border-radius: 10px;
+    background: rgba(184, 219, 217, 0.2);
+    padding: 3px 8px;
+    border-radius: 12px;
     font-size: 10px;
     font-weight: 600;
+    color: var(--color-light-mint);
 }
 
 .nav-item.active .nav-count {
-    background: var(--primary);
-    color: white;
+    background: linear-gradient(135deg, #B8DBD9 0%, #8fb3c2 100%);
+    color: #2F4550;
+    box-shadow: 0 2px 8px rgba(184, 219, 217, 0.4);
 }
 
 
@@ -197,23 +207,29 @@ body {
 
 
 .stats-card {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    background: linear-gradient(135deg, #2F4550 0%, #586F7C 50%, #B8DBD9 100%);
     padding: 14px;
     border-radius: var(--radius);
     text-align: center;
+    box-shadow: 0 4px 15px rgba(47, 69, 80, 0.3);
+    border: 1px solid rgba(184, 219, 217, 0.3);
 }
 
 .stats-number {
-    font-size: 24px;
+    font-size: 28px;
     font-weight: 700;
     margin-bottom: 2px;
-    color: #FDFBD4;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .stats-label {
-    font-size: 10px;
-    opacity: 0.9;
-    color: #FDFBD4;
+    font-size: 11px;
+    font-weight: 500;
+    opacity: 0.95;
+    color: rgba(255, 255, 255, 0.95);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 /* Main Content */
@@ -236,11 +252,11 @@ body {
     font-size: 24px;
     font-weight: 700;
     margin-bottom: 6px;
-    color: #36413E;
+    color: var(--color-dark-teal);
 }
 
 .subtitle {
-    color: #36413E;
+    color: var(--color-medium-teal);
     font-size: 16px;
 }
 
@@ -263,6 +279,18 @@ body {
     font-family: inherit;
 }
 
+.btn-primary {
+    background: linear-gradient(135deg, #2F4550 0%, #586F7C 50%, #7ea4b4 100%);
+    color: #ffffff;
+    border: none;
+    box-shadow: 0 4px 15px rgba(47, 69, 80, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(47, 69, 80, 0.4);
+}
+
 /* Button icons */
 .btn-icon,
 .export-option-icon,
@@ -274,7 +302,9 @@ body {
     vertical-align: middle;
 }
 
-.btn .btn-icon { margin-right: 8px; }
+.btn .btn-icon {
+    margin-right: 8px;
+}
 
 /* General SVG sizing inside nav / stat cards */
 .nav-icon svg,
@@ -289,7 +319,7 @@ body {
     border-radius: 18px;
     padding: 20px;
     box-shadow: 0 10px 30px rgba(13, 13, 13, 0.06);
-    transition: transform 0.28s cubic-bezier(.2,.9,.2,1), box-shadow 0.28s;
+    transition: transform 0.28s cubic-bezier(.2, .9, .2, 1), box-shadow 0.28s;
 }
 
 .stat-card:hover {
@@ -306,12 +336,12 @@ body {
     justify-content: center;
     border-radius: 12px;
     transition: all 0.3s ease;
-    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.02));
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(0, 0, 0, 0.02));
 }
 
 /* Buttons: subtle depth and hover lift */
 .btn-secondary {
-    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0));
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0));
 }
 
 .btn-ghost-danger {
@@ -327,19 +357,19 @@ body {
     justify-content: center;
     border-radius: 10px;
     margin-bottom: 8px;
-    background: rgba(255,255,255,0.03);
+    background: rgba(255, 255, 255, 0.03);
 }
 
 /* Improve small text contrast */
 .stat-card .stat-card-label,
 .stat-card .stat-delta {
-    color: rgba(61,69,102,0.85);
+    color: rgba(61, 69, 102, 0.85);
 }
 
 .btn-secondary {
-    background: rgba(255, 255, 255, 0.08);
-    color: #FDFBD4;
-    border: 1px solid var(--border);
+    background: var(--color-medium-teal);
+    color: #ffffff;
+    border: 1px solid var(--color-dark-teal);
     height: 50px;
 }
 
@@ -356,14 +386,14 @@ body {
 }
 
 .btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.12);
+    background: var(--color-dark-teal);
     transform: translateY(-2px);
 }
 
 .btn-danger {
-    background: rgba(239, 68, 68, 0.15);
-    color: var(--danger);
-    border: 1px solid rgba(239, 68, 68, 0.3);
+    background: var(--danger);
+    color: #ffffff;
+    border: 1px solid var(--danger);
 }
 
 .btn-danger:hover {
@@ -417,12 +447,13 @@ body {
 .privacy-note {
     margin: -12px 0 20px;
     font-size: 12px;
-    color: #36413E;
+    color: var(--color-medium-teal);
 }
 
 .privacy-note a {
-    color: var(--primary);
+    color: var(--color-dark-teal);
     text-decoration: none;
+    font-weight: 500;
 }
 
 .privacy-note a:hover {
@@ -440,7 +471,8 @@ body {
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
-    --stat-text: #000000; /* default text color for stat cards */
+    --stat-text: #000000;
+    /* default text color for stat cards */
 }
 
 .stat-card::before {
@@ -464,7 +496,7 @@ body {
     opacity: 0.1;
 }
 
-.stat-card > * {
+.stat-card>* {
     position: relative;
     z-index: 1;
 }
@@ -483,10 +515,21 @@ body {
 }
 
 /* Per-card text variable overrides (keeps text consistent across value/label/delta) */
-.stat-card:nth-child(1) { --stat-text: #3D4566; }
-.stat-card:nth-child(2) { --stat-text: #3D4566; }
-.stat-card:nth-child(3) { --stat-text: #3D4566; }
-.stat-card:nth-child(4) { --stat-text: #3D4566; }
+.stat-card:nth-child(1) {
+    --stat-text: #3D4566;
+}
+
+.stat-card:nth-child(2) {
+    --stat-text: #3D4566;
+}
+
+.stat-card:nth-child(3) {
+    --stat-text: #3D4566;
+}
+
+.stat-card:nth-child(4) {
+    --stat-text: #3D4566;
+}
 
 /* Apply the stat text color consistently */
 .stat-card .stat-card-value,
@@ -605,13 +648,13 @@ body {
 }
 
 .search-input::placeholder {
-    color: #3D4566;
+    color: var(--color-medium-teal);
 }
 
 .search-input:focus {
     outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+    border-color: var(--color-dark-teal);
+    box-shadow: 0 0 0 3px rgba(47, 69, 80, 0.15);
 }
 
 .filter-select {
@@ -619,7 +662,7 @@ body {
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
-    color: #3D4566;
+    color: var(--color-dark-teal);
     font-size: 14px;
     font-family: inherit;
     cursor: pointer;
@@ -628,7 +671,7 @@ body {
 
 .filter-select:focus {
     outline: none;
-    border-color: var(--primary);
+    border-color: var(--color-dark-teal);
 }
 
 .filter-select option {
@@ -639,15 +682,17 @@ body {
 .section-title {
     font-size: 14px;
     font-weight: 600;
-    color: #36413E;
+    color: var(--color-dark-teal);
     margin-bottom: 16px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
+
 /* Global H3 headings color */
 h3 {
-    color: #3D4566;
+    color: var(--color-dark-teal);
 }
+
 /* Top Sites Section */
 .top-sites-section {
     margin-bottom: 32px;
@@ -683,12 +728,14 @@ h3 {
     width: 32px;
     height: 32px;
     border-radius: 8px;
-    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    background: linear-gradient(135deg, #2F4550 0%, #586F7C 50%, #7ea4b4 100%);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 14px;
     font-weight: 600;
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(47, 69, 80, 0.3);
 }
 
 .top-site-name {
@@ -759,13 +806,15 @@ h3 {
     width: 44px;
     height: 44px;
     border-radius: 12px;
-    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    background: linear-gradient(135deg, #2F4550 0%, #586F7C 50%, #7ea4b4 100%);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 18px;
     font-weight: 600;
     flex-shrink: 0;
+    color: #ffffff;
+    box-shadow: 0 3px 10px rgba(47, 69, 80, 0.25);
 }
 
 .website-info {
@@ -1061,8 +1110,13 @@ h3 {
 }
 
 @keyframes shimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
 }
 
 @keyframes spin {
@@ -1346,139 +1400,171 @@ h3 {
     }
 }
 
-/* Unified stat-card color is consolidated below to use #898952. */
+/* Unified styling using the Coolors palette */
 
-/* Export and Clear All: use #EC4067 for primary destructive/export actions */
+/* Export buttons styled with Medium Teal */
 .export-option {
-    background: #EC4067 !important;
-    border-color: #EC4067 !important;
+    background: var(--color-medium-teal) !important;
+    border-color: var(--color-dark-teal) !important;
     color: #ffffff !important;
 }
 
 .export-option:hover {
-    background: #d83a5f !important;
-    border-color: #d83a5f !important;
+    background: var(--color-dark-teal) !important;
+    border-color: var(--color-dark-teal) !important;
 }
 
 .export-option .export-option-icon {
-    color: rgba(255,255,255,0.95) !important;
+    color: rgba(255, 255, 255, 0.95) !important;
 }
 
-/* Danger buttons (Clear All / destructive confirm) */
+/* Danger buttons */
 .btn-danger {
-    background: #EC4067 !important;
+    background: var(--danger) !important;
     color: #ffffff !important;
-    border-color: #EC4067 !important;
+    border-color: var(--danger) !important;
 }
 
 .btn-danger:hover {
-    background: #d83a5f !important;
-    border-color: #d83a5f !important;
+    background: #c82333 !important;
+    border-color: #c82333 !important;
 }
 
 .btn-ghost-danger {
     background: transparent !important;
-    color: #EC4067 !important;
-    border-color: rgba(236,64,103,0.25) !important;
+    color: var(--danger) !important;
+    border-color: rgba(220, 53, 69, 0.25) !important;
 }
 
 .btn-ghost-danger:hover {
-    background: rgba(236,64,103,0.12) !important;
+    background: rgba(220, 53, 69, 0.12) !important;
     color: #ffffff !important;
 }
 
-/* Per-card delete buttons should still indicate danger but not override primary Clear All */
 .action-btn-delete {
-    background: rgba(236,64,103,0.08) !important;
-    color: #EC4067 !important;
+    background: rgba(220, 53, 69, 0.08) !important;
+    color: var(--danger) !important;
 }
 
-/* End export/clear styling */
-
-/* Explicitly style the header Export and Clear All buttons */
-#export-btn,
-#clear-btn {
-    background: #EC4067 !important;
-    border-color: #EC4067 !important;
+/* Header Export and Clear All buttons */
+#export-btn {
+    background: var(--color-medium-teal) !important;
+    border-color: var(--color-dark-teal) !important;
     color: #ffffff !important;
 }
 
-#export-btn:hover,
-#clear-btn:hover {
-    background: #d83a5f !important;
-    border-color: #d83a5f !important;
+#export-btn:hover {
+    background: var(--color-dark-teal) !important;
+    border-color: var(--color-dark-teal) !important;
 }
 
-/* Ensure any inline icon/emoji inside the buttons is visible */
+#clear-btn {
+    background: transparent !important;
+    border-color: rgba(220, 53, 69, 0.25) !important;
+    color: var(--danger) !important;
+}
+
+#clear-btn:hover {
+    background: rgba(220, 53, 69, 0.12) !important;
+    border-color: var(--danger) !important;
+}
+
 #export-btn svg,
 #export-btn .icon,
-#export-btn span,
-#clear-btn svg,
-#clear-btn .icon,
-#clear-btn span {
+#export-btn span {
     color: #ffffff !important;
 }
 
-/* Keep accessibility focus state readable */
 #export-btn:focus,
 #clear-btn:focus {
-    outline: 3px solid rgba(236,64,103,0.18);
+    outline: 3px solid rgba(47, 69, 80, 0.18);
 }
 
-/* End header button overrides */
-
+/* View toggle buttons - using Light Mint */
 .view-toggle .toggle-btn {
-    background: #E78F8E !important;
-    color: #3D4566 !important;
-    border: 1px solid rgba(0,0,0,0.04) !important;
+    background: var(--color-light-mint) !important;
+    color: var(--color-dark-teal) !important;
+    border: 1px solid rgba(47, 69, 80, 0.1) !important;
 }
 
 .view-toggle .toggle-btn:hover {
-    background: #e17676 !important;
-    color: #3D4566 !important;
+    background: rgba(184, 219, 217, 0.8) !important;
+    color: var(--color-dark-teal) !important;
 }
 
 .view-toggle .toggle-btn.active {
-    background: #e17676 !important;
-    color: #3D4566 !important;
+    background: var(--color-medium-teal) !important;
+    color: #ffffff !important;
 }
 
 .view-toggle .toggle-btn:focus {
-    outline: 3px solid rgba(231,143,142,0.18);
+    outline: 3px solid rgba(47, 69, 80, 0.18);
 }
 
-/* Ensure the small 'Recent / All' text contrast remains high on small screens */
 @media (max-width: 900px) {
     .view-toggle .toggle-btn {
-        background: #E78F8E !important;
-        color: #3D4566 !important;
+        background: var(--color-light-mint) !important;
+        color: var(--color-dark-teal) !important;
     }
 }
 
-/* End view-toggle overrides */
+/* Stat cards with beautiful gradients */
+.stats-grid .stat-card {
+    border: none !important;
+    box-shadow: 0 4px 20px rgba(47, 69, 80, 0.15) !important;
+    transition: all 0.3s ease !important;
+}
 
-/* Override: set all stat cards to #898952 as requested */
-.stats-grid .stat-card,
 .stats-grid .stat-card::before {
-    background: #898952 !important;
-    border-color: #898952 !important;
+    background: transparent !important;
+}
+
+/* First card - Websites (Dark Teal gradient) */
+.stats-grid .stat-card:nth-child(1) {
+    background: linear-gradient(135deg, #2F4550 0%, #3d5a66 50%, #4a6b78 100%) !important;
+}
+
+/* Second card - Today (Medium Teal to Mint gradient) */
+.stats-grid .stat-card:nth-child(2) {
+    background: linear-gradient(135deg, #586F7C 0%, #6a8a9a 50%, #7ea4b4 100%) !important;
+}
+
+/* Third card - Emails Shared (Teal to Light gradient) */
+.stats-grid .stat-card:nth-child(3) {
+    background: linear-gradient(135deg, #4a6b78 0%, #6a8a9a 50%, #8fb3c2 100%) !important;
+}
+
+/* Fourth card - Privacy Risk (Accent gradient) */
+.stats-grid .stat-card:nth-child(4) {
+    background: linear-gradient(135deg, #2F4550 0%, #586F7C 50%, #B8DBD9 100%) !important;
 }
 
 .stats-grid .stat-card:hover {
-    background: #7f7f48 !important;
-    border-color: #7f7f48 !important;
-    box-shadow: 0 8px 24px rgba(137,137,82,0.35) !important;
+    transform: translateY(-6px) scale(1.02) !important;
+    box-shadow: 0 12px 30px rgba(47, 69, 80, 0.25) !important;
 }
 
 .stats-grid .stat-card .stat-card-icon {
-    background: rgba(255,255,255,0.06) !important;
-    color: #3D4566 !important;
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;
+    backdrop-filter: blur(4px);
 }
 
-.stats-grid .stat-card .stat-card-value,
-.stats-grid .stat-card .stat-card-label,
+.stats-grid .stat-card .stat-card-value {
+    color: #ffffff !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    font-size: 26px !important;
+}
+
+.stats-grid .stat-card .stat-card-label {
+    color: rgba(255, 255, 255, 0.9) !important;
+    text-transform: uppercase;
+    font-size: 11px !important;
+    letter-spacing: 0.5px;
+}
+
 .stats-grid .stat-card .stat-delta {
-    color: #3D4566 !important;
+    color: rgba(255, 255, 255, 0.8) !important;
 }
 
-/* End stat-card 898952 override */
+/* End Coolors palette styling */

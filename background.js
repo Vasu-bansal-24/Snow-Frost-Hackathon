@@ -88,7 +88,7 @@ async function deleteConsent(id) {
 function updateBadge(count) {
     const text = count > 0 ? (count > 99 ? '99+' : count.toString()) : '';
     chrome.action.setBadgeText({ text });
-    chrome.action.setBadgeBackgroundColor({ color: '#667eea' });
+    chrome.action.setBadgeBackgroundColor({ color: '#2F4550' });
 }
 
 // Initialize badge on startup
