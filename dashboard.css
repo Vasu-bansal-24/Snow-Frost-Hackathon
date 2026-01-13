@@ -8,12 +8,12 @@
     --primary-dark: #5a67d8;
     --secondary: #764ba2;
     --accent: #f093fb;
-    --bg-dark: #cdd6f4;
-    --bg-sidebar: #1AC8ED;
-    --bg-card: #8C2155;
+    --bg-dark: #FDFBD4;
+    --bg-sidebar: #37392E;
+    --bg-card: #E78F8E;
     --bg-card-hover: rgba(35, 35, 55, 0.95);
-    --text-primary: #ffffff;
-    --text-secondary: rgba(255, 255, 255, 0.7);
+    --text-primary: #000000;
+    --text-secondary: #FDFBD4;
     --text-muted: rgba(255, 255, 255, 0.5);
     --border: rgba(255, 255, 255, 0.08);
     --danger: #ef4444;
@@ -137,7 +137,7 @@ body {
 }
 
 .nav-item.active {
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
     color: var(--primary);
 }
 
@@ -207,11 +207,13 @@ body {
     font-size: 24px;
     font-weight: 700;
     margin-bottom: 2px;
+    color: #FDFBD4;
 }
 
 .stats-label {
     font-size: 10px;
     opacity: 0.9;
+    color: #FDFBD4;
 }
 
 /* Main Content */
@@ -234,11 +236,12 @@ body {
     font-size: 24px;
     font-weight: 700;
     margin-bottom: 6px;
+    color: #36413E;
 }
 
 .subtitle {
-    color: var(--text-muted);
-    font-size: 13px;
+    color: #36413E;
+    font-size: 16px;
 }
 
 .header-actions {
@@ -260,10 +263,84 @@ body {
     font-family: inherit;
 }
 
+/* Button icons */
+.btn-icon,
+.export-option-icon,
+.search-icon,
+.modal .icon {
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.btn .btn-icon { margin-right: 8px; }
+
+/* General SVG sizing inside nav / stat cards */
+.nav-icon svg,
+.icon,
+.stat-card-icon svg {
+    width: 22px;
+    height: 22px;
+}
+
+/* Visual polish: more depth and spacing */
+.stat-card {
+    border-radius: 18px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(13, 13, 13, 0.06);
+    transition: transform 0.28s cubic-bezier(.2,.9,.2,1), box-shadow 0.28s;
+}
+
+.stat-card:hover {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 0 18px 40px rgba(13, 13, 13, 0.12);
+}
+
+.stat-card-icon {
+    font-size: 32px;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.02));
+}
+
+/* Buttons: subtle depth and hover lift */
+.btn-secondary {
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0));
+}
+
+.btn-ghost-danger {
+    box-shadow: none;
+}
+
+/* Export-option icon sizing */
+.export-option .export-option-icon {
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    background: rgba(255,255,255,0.03);
+}
+
+/* Improve small text contrast */
+.stat-card .stat-card-label,
+.stat-card .stat-delta {
+    color: rgba(61,69,102,0.85);
+}
+
 .btn-secondary {
     background: rgba(255, 255, 255, 0.08);
-    color: var(--text-primary);
+    color: #FDFBD4;
     border: 1px solid var(--border);
+    height: 50px;
 }
 
 .btn-ghost-danger {
@@ -340,7 +417,7 @@ body {
 .privacy-note {
     margin: -12px 0 20px;
     font-size: 12px;
-    color: var(--text-muted);
+    color: #36413E;
 }
 
 .privacy-note a {
@@ -363,6 +440,7 @@ body {
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
+    --stat-text: #000000; /* default text color for stat cards */
 }
 
 .stat-card::before {
@@ -391,138 +469,7 @@ body {
     z-index: 1;
 }
 
-/* Individual card colors */
-.stat-card:nth-child(1) {
-    background: linear-gradient(135deg, #AED4E6 0%, #8FBFD4 100%);
-    border-color: #AED4E6;
-}
-
-.stat-card:nth-child(1)::before {
-    background: linear-gradient(135deg, #AED4E6 0%, #8FBFD4 100%);
-}
-
-.stat-card:nth-child(1):hover {
-    background: linear-gradient(135deg, #8FBFD4 0%, #7BA9C2 100%);
-    border-color: #8FBFD4;
-    box-shadow: 0 8px 24px rgba(174, 212, 230, 0.6);
-}
-
-.stat-card:nth-child(1) .stat-card-icon {
-    background: rgba(174, 212, 230, 0.4);
-    color: #ffffff;
-}
-
-.stat-card:nth-child(1):hover .stat-card-icon {
-    background: rgba(174, 212, 230, 0.6);
-    color: #ffffff;
-}
-
-.stat-card:nth-child(1) .stat-card-value {
-    color: #ffffff;
-}
-
-.stat-card:nth-child(1):hover .stat-card-value {
-    color: #ffffff;
-}
-
-.stat-card:nth-child(2) {
-    background: linear-gradient(135deg, #AF7595 0%, #956284 100%);
-    border-color: #AF7595;
-}
-
-.stat-card:nth-child(2)::before {
-    background: linear-gradient(135deg, #AF7595 0%, #956284 100%);
-}
-
-.stat-card:nth-child(2):hover {
-    background: linear-gradient(135deg, #956284 0%, #7F4A6F 100%);
-    border-color: #956284;
-    box-shadow: 0 8px 24px rgba(175, 117, 149, 0.6);
-}
-
-.stat-card:nth-child(2) .stat-card-icon {
-    background: rgba(255, 255, 255, 0.3);
-    color: #ffffff;
-}
-
-.stat-card:nth-child(2):hover .stat-card-icon {
-    background: rgba(255, 255, 255, 0.4);
-    color: #ffffff;
-}
-
-.stat-card:nth-child(2) .stat-card-value {
-    color: #ffffff;
-}
-
-.stat-card:nth-child(2):hover .stat-card-value {
-    color: #ffffff;
-}
-
-.stat-card:nth-child(3) {
-    background: linear-gradient(135deg, #8C2155 0%, #6F1A45 100%);
-    border-color: #8C2155;
-}
-
-.stat-card:nth-child(3)::before {
-    background: linear-gradient(135deg, #8C2155 0%, #6F1A45 100%);
-}
-
-.stat-card:nth-child(3):hover {
-    background: linear-gradient(135deg, #6F1A45 0%, #581438 100%);
-    border-color: #6F1A45;
-    box-shadow: 0 8px 24px rgba(140, 33, 85, 0.6);
-}
-
-.stat-card:nth-child(3) .stat-card-icon {
-    background: rgba(255, 255, 255, 0.3);
-    color: #ffffff;
-}
-
-.stat-card:nth-child(3):hover .stat-card-icon {
-    background: rgba(255, 255, 255, 0.4);
-    color: #ffffff;
-}
-
-.stat-card:nth-child(3) .stat-card-value {
-    color: #ffffff;
-}
-
-.stat-card:nth-child(3):hover .stat-card-value {
-    color: #ffffff;
-}
-
-.stat-card:nth-child(4) {
-    background: linear-gradient(135deg, #8C2155 0%, #8C2155 100%);
-    border-color: #8C2155;
-}
-
-.stat-card:nth-child(4)::before {
-    background: linear-gradient(135deg, #8C2155 0%, #8C2155 100%);
-}
-
-.stat-card:nth-child(4):hover {
-    background: linear-gradient(135deg, #8C2155 0%, #8C2155 100%);
-    border-color: #8C2155;
-    box-shadow: 0 8px 24px rgba(140, 33, 85, 0.6);
-}
-
-.stat-card:nth-child(4) .stat-card-icon {
-    background: rgba(255, 255, 255, 0.3);
-    color: #ffffff;
-}
-
-.stat-card:nth-child(4):hover .stat-card-icon {
-    background: rgba(255, 255, 255, 0.4);
-    color: #ffffff;
-}
-
-.stat-card:nth-child(4) .stat-card-value {
-    color: #ffffff;
-}
-
-.stat-card:nth-child(4):hover .stat-card-value {
-    color: #ffffff;
-}
+/* Per-card colors removed to consolidate color handling below. */
 
 .stat-card-icon {
     font-size: 32px;
@@ -533,6 +480,19 @@ body {
     justify-content: center;
     border-radius: 12px;
     transition: all 0.3s ease;
+}
+
+/* Per-card text variable overrides (keeps text consistent across value/label/delta) */
+.stat-card:nth-child(1) { --stat-text: #3D4566; }
+.stat-card:nth-child(2) { --stat-text: #3D4566; }
+.stat-card:nth-child(3) { --stat-text: #3D4566; }
+.stat-card:nth-child(4) { --stat-text: #3D4566; }
+
+/* Apply the stat text color consistently */
+.stat-card .stat-card-value,
+.stat-card .stat-card-label,
+.stat-card .stat-delta {
+    color: var(--stat-text) !important;
 }
 
 .stat-card-value {
@@ -645,7 +605,7 @@ body {
 }
 
 .search-input::placeholder {
-    color: var(--text-muted);
+    color: #3D4566;
 }
 
 .search-input:focus {
@@ -659,7 +619,7 @@ body {
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
-    color: var(--text-primary);
+    color: #3D4566;
     font-size: 14px;
     font-family: inherit;
     cursor: pointer;
@@ -679,12 +639,15 @@ body {
 .section-title {
     font-size: 14px;
     font-weight: 600;
-    color: var(--text-secondary);
+    color: #36413E;
     margin-bottom: 16px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
-
+/* Global H3 headings color */
+h3 {
+    color: #3D4566;
+}
 /* Top Sites Section */
 .top-sites-section {
     margin-bottom: 32px;
@@ -1382,3 +1345,140 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
+/* Unified stat-card color is consolidated below to use #898952. */
+
+/* Export and Clear All: use #EC4067 for primary destructive/export actions */
+.export-option {
+    background: #EC4067 !important;
+    border-color: #EC4067 !important;
+    color: #ffffff !important;
+}
+
+.export-option:hover {
+    background: #d83a5f !important;
+    border-color: #d83a5f !important;
+}
+
+.export-option .export-option-icon {
+    color: rgba(255,255,255,0.95) !important;
+}
+
+/* Danger buttons (Clear All / destructive confirm) */
+.btn-danger {
+    background: #EC4067 !important;
+    color: #ffffff !important;
+    border-color: #EC4067 !important;
+}
+
+.btn-danger:hover {
+    background: #d83a5f !important;
+    border-color: #d83a5f !important;
+}
+
+.btn-ghost-danger {
+    background: transparent !important;
+    color: #EC4067 !important;
+    border-color: rgba(236,64,103,0.25) !important;
+}
+
+.btn-ghost-danger:hover {
+    background: rgba(236,64,103,0.12) !important;
+    color: #ffffff !important;
+}
+
+/* Per-card delete buttons should still indicate danger but not override primary Clear All */
+.action-btn-delete {
+    background: rgba(236,64,103,0.08) !important;
+    color: #EC4067 !important;
+}
+
+/* End export/clear styling */
+
+/* Explicitly style the header Export and Clear All buttons */
+#export-btn,
+#clear-btn {
+    background: #EC4067 !important;
+    border-color: #EC4067 !important;
+    color: #ffffff !important;
+}
+
+#export-btn:hover,
+#clear-btn:hover {
+    background: #d83a5f !important;
+    border-color: #d83a5f !important;
+}
+
+/* Ensure any inline icon/emoji inside the buttons is visible */
+#export-btn svg,
+#export-btn .icon,
+#export-btn span,
+#clear-btn svg,
+#clear-btn .icon,
+#clear-btn span {
+    color: #ffffff !important;
+}
+
+/* Keep accessibility focus state readable */
+#export-btn:focus,
+#clear-btn:focus {
+    outline: 3px solid rgba(236,64,103,0.18);
+}
+
+/* End header button overrides */
+
+.view-toggle .toggle-btn {
+    background: #E78F8E !important;
+    color: #3D4566 !important;
+    border: 1px solid rgba(0,0,0,0.04) !important;
+}
+
+.view-toggle .toggle-btn:hover {
+    background: #e17676 !important;
+    color: #3D4566 !important;
+}
+
+.view-toggle .toggle-btn.active {
+    background: #e17676 !important;
+    color: #3D4566 !important;
+}
+
+.view-toggle .toggle-btn:focus {
+    outline: 3px solid rgba(231,143,142,0.18);
+}
+
+/* Ensure the small 'Recent / All' text contrast remains high on small screens */
+@media (max-width: 900px) {
+    .view-toggle .toggle-btn {
+        background: #E78F8E !important;
+        color: #3D4566 !important;
+    }
+}
+
+/* End view-toggle overrides */
+
+/* Override: set all stat cards to #898952 as requested */
+.stats-grid .stat-card,
+.stats-grid .stat-card::before {
+    background: #898952 !important;
+    border-color: #898952 !important;
+}
+
+.stats-grid .stat-card:hover {
+    background: #7f7f48 !important;
+    border-color: #7f7f48 !important;
+    box-shadow: 0 8px 24px rgba(137,137,82,0.35) !important;
+}
+
+.stats-grid .stat-card .stat-card-icon {
+    background: rgba(255,255,255,0.06) !important;
+    color: #3D4566 !important;
+}
+
+.stats-grid .stat-card .stat-card-value,
+.stats-grid .stat-card .stat-card-label,
+.stats-grid .stat-card .stat-delta {
+    color: #3D4566 !important;
+}
+
+/* End stat-card 898952 override */

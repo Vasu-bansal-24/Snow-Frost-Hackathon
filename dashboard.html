@@ -10,8 +10,16 @@
 
 <body>
     <!-- Icon sprite (Lucide-inspired minimal set) -->
-    <svg width="0" height="0" style="position:absolute;">
+            <svg width="0" height="0" style="position:absolute;">
         <defs>
+            
+            <!-- Alert icon (triangle exclamation) -->
+            <symbol id="icon-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                <line x1="12" y1="9" x2="12" y2="13"></line>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </symbol>
+
             <symbol id="icon-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="5" y="11" width="14" height="10" rx="2"></rect>
                 <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
@@ -220,10 +228,10 @@
                 </div>
                 <div class="header-actions">
                     <button id="export-btn" class="btn btn-secondary">
-                        <span aria-hidden="true">📤</span> Export
+                        <svg class="btn-icon" aria-hidden="true"><use href="#icon-upload"></use></svg> Export
                     </button>
                     <button id="clear-btn" class="btn btn-ghost-danger" aria-label="Clear all consents">
-                        <span aria-hidden="true">🗑️</span> Clear All
+                        <svg class="btn-icon" aria-hidden="true"><use href="#icon-trash"></use></svg> Clear All
                     </button>
                 </div>
             </header>
@@ -268,7 +276,7 @@
             <!-- Search and Filters -->
             <div class="search-bar">
                 <div class="search-input-wrapper">
-                    <span class="search-icon" aria-hidden="true">🔍</span>
+                    <svg class="search-icon" aria-hidden="true"><use href="#icon-search"></use></svg>
                     <input type="text" id="search-input" class="search-input"
                         placeholder="Type to search ( / to focus )">
                 </div>
@@ -318,7 +326,7 @@
                         </svg>
                     </div>
                     <h3>No consents yet</h3>
-                    <p>Browse and interact—everything you say yes to will show up here. Use the filters or add a site manually.</p>
+                    <p style="color: #3D4566;">Browse and interact—everything you say yes to will show up here. Use the filters or add a site manually.</p>
                 </div>
 
                 <!-- Loading State -->
@@ -337,7 +345,7 @@
     <!-- Confirm Modal -->
     <div id="confirm-modal" class="modal-overlay hidden">
         <div class="modal">
-            <div class="modal-icon">⚠️</div>
+            <div class="modal-icon"><svg class="icon" aria-hidden="true"><use href="#icon-alert"></use></svg></div>
             <h3>Clear All Consents?</h3>
             <p>This will permanently delete all <span id="clear-count">0</span> tracked consent records. This action
                 cannot be undone.</p>
@@ -350,17 +358,17 @@
     <!-- Export Modal -->
     <div id="export-modal" class="modal-overlay hidden">
         <div class="modal">
-            <div class="modal-icon">📤</div>
+            <div class="modal-icon"><svg class="icon" aria-hidden="true"><use href="#icon-upload"></use></svg></div>
             <h3>Export Consent Data</h3>
             <p>Choose your preferred export format:</p>
             <div class="export-options">
                 <button id="export-json" class="export-option">
-                    <span class="export-option-icon">📄</span>
+                    <svg class="export-option-icon" aria-hidden="true"><use href="#icon-file-text"></use></svg>
                     <span class="export-option-label">JSON</span>
                     <span class="export-option-desc">Full data export</span>
                 </button>
                 <button id="export-csv" class="export-option">
-                    <span class="export-option-icon">📊</span>
+                    <svg class="export-option-icon" aria-hidden="true"><use href="#icon-grid"></use></svg>
                     <span class="export-option-label">CSV</span>
                     <span class="export-option-desc">Spreadsheet format</span>
                 </button>
@@ -372,7 +380,7 @@
     <!-- Settings Modal -->
     <div id="settings-modal" class="modal-overlay hidden">
         <div class="modal">
-            <div class="modal-icon">⚙️</div>
+            <div class="modal-icon"><svg class="icon" aria-hidden="true"><use href="#icon-settings"></use></svg></div>
             <h3>Preferences</h3>
             <p>Control how your consent data is kept locally.</p>
             <div class="settings-group">
