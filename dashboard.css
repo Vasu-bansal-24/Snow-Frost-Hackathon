@@ -690,7 +690,7 @@ body {
 
 /* Global H3 headings color */
 h3 {
-    color: var(--color-dark-teal);
+    color: black;
 }
 
 /* Top Sites Section */
@@ -1252,7 +1252,7 @@ h3 {
 
 .export-option-desc {
     font-size: 11px;
-    color: var(--text-muted);
+    color: black;
 }
 
 /* Settings Modal Form */
