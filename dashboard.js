@@ -67,6 +67,18 @@ document.addEventListener('DOMContentLoaded', () => {
     // Load consents on page load
     loadSettings().then(loadConsents);
 
+    // Handle URL hash for opening modals from popup - open immediately
+    const hash = window.location.hash;
+    if (hash === '#export' && exportModal) {
+        confirmModal?.classList.add('hidden');
+        settingsModal?.classList.add('hidden');
+        exportModal.classList.remove('hidden');
+    } else if (hash === '#settings' && settingsModal) {
+        confirmModal?.classList.add('hidden');
+        exportModal?.classList.add('hidden');
+        settingsModal.classList.remove('hidden');
+    }
+
     // Listen for storage changes (real-time updates)
     chrome.storage.onChanged.addListener((changes, namespace) => {
         if (namespace === 'local' && changes.consents) {
@@ -642,7 +654,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Show toast notification
-        function showToast(message, type = 'success') {
+    function showToast(message, type = 'success') {
         const toast = document.createElement('div');
         toast.className = `toast ${type}`;
         toast.innerHTML = `

@@ -57,6 +57,38 @@ document.addEventListener('DOMContentLoaded', () => {
         chrome.tabs.create({ url: chrome.runtime.getURL('dashboard.html') });
     });
 
+    // Export button in header - opens dashboard with export modal
+    document.getElementById('popup-export')?.addEventListener('click', () => {
+        chrome.tabs.create({ url: chrome.runtime.getURL('dashboard.html#export') });
+    });
+
+    // Settings button in header - opens dashboard with settings
+    document.getElementById('popup-settings')?.addEventListener('click', () => {
+        chrome.tabs.create({ url: chrome.runtime.getURL('dashboard.html#settings') });
+    });
+
+    // Export button at bottom
+    document.getElementById('btn-export')?.addEventListener('click', () => {
+        chrome.tabs.create({ url: chrome.runtime.getURL('dashboard.html#export') });
+    });
+
+    // Clear button at bottom
+    document.getElementById('btn-clear')?.addEventListener('click', () => {
+        if (confirm('Are you sure you want to clear all consent records? This cannot be undone.')) {
+            chrome.storage.local.set({ consents: [] }, () => {
+                // Refresh the popup stats
+                document.getElementById('count').textContent = '0';
+                document.getElementById('sites').textContent = '0';
+                document.getElementById('today').textContent = '0';
+                document.getElementById('recent-list').innerHTML = `
+                    <div class="empty-state" style="padding:16px;text-align:center;">
+                        <p style="margin:0;color:var(--color-medium-teal);">All consents cleared.</p>
+                    </div>
+                `;
+            });
+        }
+    });
+
     function calculateRisk(consents) {
         if (consents.length === 0) return { level: 'low', label: 'Low' };
 
