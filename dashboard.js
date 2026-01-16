@@ -37,12 +37,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const saveSettings = document.getElementById('save-settings');
     const retentionSelect = document.getElementById('retention-select');
 
+    // Blockchain panel elements
+    const blockchainPanel = document.getElementById('blockchain-panel');
+    const anchorBatchBtn = document.getElementById('anchor-batch-btn');
+    const viewBatchesBtn = document.getElementById('view-batches-btn');
+    const batchesModal = document.getElementById('batches-modal');
+    const closeBatches = document.getElementById('close-batches');
+    const batchesList = document.getElementById('batches-list');
+    const verifyModal = document.getElementById('verify-modal');
+    const closeVerify = document.getElementById('close-verify');
+    const showProofBtn = document.getElementById('show-proof-btn');
+
     let allConsents = [];
     let currentFilter = 'all';
     let searchQuery = '';
     let dateRange = 'all';
     let viewMode = 'recent'; // recent | all
     let settings = { retentionDays: 'never' };
+    let currentVerifyProof = null; // Store current verification proof for display
 
     // Category display info
     const categoryInfo = {
@@ -174,6 +186,63 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     exportModal.addEventListener('click', (e) => {
         if (e.target === exportModal) exportModal.classList.add('hidden');
+    });
+
+    // Blockchain panel event listeners
+    anchorBatchBtn?.addEventListener('click', async () => {
+        anchorBatchBtn.disabled = true;
+        anchorBatchBtn.textContent = 'Anchoring...';
+
+        chrome.runtime.sendMessage({ type: 'ANCHOR_BATCH' }, (result) => {
+            anchorBatchBtn.disabled = false;
+            anchorBatchBtn.innerHTML = `
+                <svg class="btn-icon" aria-hidden="true">
+                    <use href="#icon-verified"></use>
+                </svg>
+                Anchor Today's Batch
+            `;
+
+            if (result && result.success) {
+                showToast('Batch anchored successfully!', 'success');
+                updateBlockchainStats();
+            } else {
+                showToast(result?.message || 'Anchoring failed', 'error');
+            }
+        });
+    });
+
+    viewBatchesBtn?.addEventListener('click', () => {
+        chrome.runtime.sendMessage({ type: 'GET_ALL_BATCHES' }, (batches) => {
+            renderBatchesList(batches || []);
+            batchesModal.classList.remove('hidden');
+        });
+    });
+
+    closeBatches?.addEventListener('click', () => batchesModal.classList.add('hidden'));
+    closeVerify?.addEventListener('click', () => verifyModal.classList.add('hidden'));
+
+    showProofBtn?.addEventListener('click', () => {
+        const proofBox = document.getElementById('verify-proof-box');
+        const proofList = document.getElementById('proof-list');
+
+        if (proofBox.classList.contains('hidden') && currentVerifyProof) {
+            proofList.innerHTML = currentVerifyProof.map((hash, i) => `
+                <div class="proof-item">${hash.substring(0, 16)}...${hash.slice(-8)}</div>
+            `).join('');
+            proofBox.classList.remove('hidden');
+            showProofBtn.textContent = 'Hide Proof';
+        } else {
+            proofBox.classList.add('hidden');
+            showProofBtn.textContent = 'Show Proof';
+        }
+    });
+
+    batchesModal?.addEventListener('click', (e) => {
+        if (e.target === batchesModal) batchesModal.classList.add('hidden');
+    });
+
+    verifyModal?.addEventListener('click', (e) => {
+        if (e.target === verifyModal) verifyModal.classList.add('hidden');
     });
 
     // Navigation filter clicks
@@ -457,6 +526,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 toggleFlag(id, 'important');
             });
         });
+
+        // Copy hash event listeners
+        consentList.querySelectorAll('.copy-hash-btn').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                const hash = e.currentTarget.dataset.hash;
+                try {
+                    await navigator.clipboard.writeText(hash);
+                    showToast('Proof hash copied to clipboard', 'success');
+                } catch (err) {
+                    showToast('Failed to copy hash', 'error');
+                }
+            });
+        });
     }
 
     // Create a consent card
@@ -473,6 +555,32 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (consent.browserPermission) {
             tags += `<div class="browser-tag">🌐 Browser Permission</div>`;
+        }
+
+        // Proof hash display
+        let proofHashHtml = '';
+        if (consent.proofHash) {
+            const shortHash = consent.proofHash.substring(0, 8) + '...' + consent.proofHash.substring(consent.proofHash.length - 4);
+            const verifiedClass = consent.blockchainVerified ? 'verified' : '';
+            const verifiedIcon = consent.blockchainVerified ? '<svg class="icon verified-icon" aria-hidden="true"><use href="#icon-verified"></use></svg>' : '';
+            const networkLabel = consent.simulated ? 'Demo Mode' : (consent.blockchainNetwork || 'Blockchain');
+
+            proofHashHtml = `
+                <div class="proof-hash-container ${verifiedClass}">
+                    <div class="proof-hash-header">
+                        ${verifiedIcon}
+                        <span class="proof-hash-label">Proof Hash</span>
+                        <span class="proof-hash-network">${escapeHtml(networkLabel)}</span>
+                    </div>
+                    <div class="proof-hash-value">
+                        <code class="hash-code" title="${escapeHtml(consent.proofHash)}">${shortHash}</code>
+                        <button class="copy-hash-btn" data-hash="${escapeHtml(consent.proofHash)}" title="Copy full hash">
+                            <svg class="icon" aria-hidden="true"><use href="#icon-copy"></use></svg>
+                        </button>
+                    </div>
+                    ${consent.txHash ? `<div class="tx-hash">TX: ${consent.txHash.substring(0, 10)}...</div>` : ''}
+                </div>
+            `;
         }
 
         return `
@@ -494,6 +602,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ${infoMessage}
             ${tags}
           </div>
+          ${proofHashHtml}
         </div>
         <div class="consent-footer">
           <span class="consent-time">🕐 ${time}</span>
@@ -608,7 +717,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     action: c.buttonText,
                     emailShared: c.emailShared || false,
                     browserPermission: c.browserPermission || false,
-                    timestamp: new Date(c.timestamp).toISOString()
+                    timestamp: new Date(c.timestamp).toISOString(),
+                    proofHash: c.proofHash || null,
+                    txHash: c.txHash || null,
+                    blockchainNetwork: c.blockchainNetwork || null,
+                    blockchainVerified: c.blockchainVerified || false
                 }))
             };
             content = JSON.stringify(exportData, null, 2);
@@ -616,7 +729,7 @@ document.addEventListener('DOMContentLoaded', () => {
             type = 'application/json';
         } else {
             // CSV
-            const headers = ['Website', 'URL', 'Category', 'Action', 'Email Shared', 'Browser Permission', 'Timestamp'];
+            const headers = ['Website', 'URL', 'Category', 'Action', 'Email Shared', 'Browser Permission', 'Timestamp', 'Proof Hash', 'TX Hash', 'Verified'];
             const rows = allConsents.map(c => [
                 c.domain,
                 c.url,
@@ -624,7 +737,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 `"${c.buttonText.replace(/"/g, '""')}"`,
                 c.emailShared ? 'Yes' : 'No',
                 c.browserPermission ? 'Yes' : 'No',
-                new Date(c.timestamp).toISOString()
+                new Date(c.timestamp).toISOString(),
+                c.proofHash || '',
+                c.txHash || '',
+                c.blockchainVerified ? 'Yes' : 'No'
             ]);
             content = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
             filename = `consent-tracker-${date}.csv`;
@@ -750,4 +866,130 @@ document.addEventListener('DOMContentLoaded', () => {
             timeout = setTimeout(later, wait);
         };
     }
+
+    // ============ Blockchain Helper Functions ============
+
+    // Update blockchain panel stats
+    function updateBlockchainStats() {
+        chrome.runtime.sendMessage({ type: 'GET_BLOCKCHAIN_STATS' }, (stats) => {
+            if (!stats) return;
+
+            const pendingEl = document.getElementById('pending-consents');
+            const batchesEl = document.getElementById('anchored-batches');
+            const anchoredEl = document.getElementById('total-anchored');
+            const modeEl = document.getElementById('blockchain-mode');
+
+            if (pendingEl) pendingEl.textContent = stats.pendingConsents || 0;
+            if (batchesEl) batchesEl.textContent = stats.anchoredBatches || 0;
+            if (anchoredEl) anchoredEl.textContent = stats.totalAnchoredConsents || 0;
+            if (modeEl) {
+                modeEl.textContent = stats.simulatedMode ? 'Demo Mode' : 'Live';
+                modeEl.classList.toggle('live', !stats.simulatedMode);
+            }
+        });
+    }
+
+    // Render batches list in modal
+    function renderBatchesList(batches) {
+        if (!batchesList) return;
+
+        if (batches.length === 0) {
+            batchesList.innerHTML = `
+                <div class="empty-batches">
+                    <p>No batches anchored yet. Click "Anchor Today's Batch" to create your first anchor.</p>
+                </div>
+            `;
+            return;
+        }
+
+        batchesList.innerHTML = batches.map(batch => `
+            <div class="batch-item">
+                <div class="batch-header">
+                    <span class="batch-date">${formatDayTimestamp(batch.dayTimestamp)}</span>
+                    <span class="batch-count">${batch.consentCount} consents</span>
+                </div>
+                <div class="batch-details">
+                    <div class="batch-detail">
+                        <span class="batch-detail-label">Root:</span>
+                        <span class="batch-detail-value">${batch.merkleRoot?.substring(0, 12)}...</span>
+                    </div>
+                    <div class="batch-detail">
+                        <span class="batch-detail-label">TX:</span>
+                        <span class="batch-detail-value">${batch.txHash?.substring(0, 12)}...</span>
+                    </div>
+                    <div class="batch-detail">
+                        <span class="batch-detail-label">Block:</span>
+                        <span class="batch-detail-value">${batch.blockNumber}</span>
+                    </div>
+                    <div class="batch-detail">
+                        <span class="batch-detail-label">Network:</span>
+                        <span class="batch-detail-value">${batch.network}</span>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // Verify a consent and show modal
+    function verifyConsentHash(consentHash) {
+        if (!verifyModal) return;
+
+        // Reset modal state
+        const statusEl = document.getElementById('verify-status');
+        const hashEl = document.getElementById('verify-hash');
+        const rootEl = document.getElementById('verify-root');
+        const txEl = document.getElementById('verify-tx');
+        const blockEl = document.getElementById('verify-block');
+        const networkEl = document.getElementById('verify-network');
+        const proofCountEl = document.getElementById('verify-proof-count');
+        const proofBox = document.getElementById('verify-proof-box');
+
+        statusEl.innerHTML = '<span class="verify-badge pending">Verifying...</span>';
+        hashEl.textContent = consentHash;
+        rootEl.textContent = '-';
+        txEl.textContent = '-';
+        blockEl.textContent = '-';
+        networkEl.textContent = '-';
+        proofCountEl.textContent = '-';
+        proofBox.classList.add('hidden');
+        showProofBtn.textContent = 'Show Proof';
+        currentVerifyProof = null;
+
+        verifyModal.classList.remove('hidden');
+
+        chrome.runtime.sendMessage({ type: 'VERIFY_CONSENT', hash: consentHash }, (result) => {
+            if (result && result.verified) {
+                statusEl.innerHTML = '<span class="verify-badge verified">✓ Verified On-Chain</span>';
+                rootEl.textContent = result.batch?.merkleRoot?.substring(0, 20) + '...' || '-';
+                txEl.textContent = result.batch?.txHash?.substring(0, 20) + '...' || '-';
+                blockEl.textContent = result.batch?.blockNumber || '-';
+                networkEl.textContent = result.batch?.network || '-';
+                proofCountEl.textContent = result.proof ? `${result.proof.length} levels` : '-';
+                currentVerifyProof = result.proof || null;
+            } else if (result && result.pending) {
+                statusEl.innerHTML = '<span class="verify-badge pending">⏳ Pending Anchoring</span>';
+            } else {
+                statusEl.innerHTML = '<span class="verify-badge failed">✗ Not Found</span>';
+            }
+        });
+    }
+
+    // Format day timestamp for display
+    function formatDayTimestamp(timestamp) {
+        if (!timestamp) return 'Unknown';
+        const date = new Date(timestamp * 1000);
+        return date.toLocaleDateString('en-US', {
+            weekday: 'short',
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+        });
+    }
+
+    // Load blockchain stats on page load
+    updateBlockchainStats();
+
+    // Refresh blockchain stats periodically
+    setInterval(updateBlockchainStats, 30000); // Every 30 seconds
 });
+

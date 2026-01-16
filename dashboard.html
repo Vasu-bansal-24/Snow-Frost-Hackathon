@@ -149,6 +149,26 @@
                 stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="6 9 12 15 18 9"></polyline>
             </symbol>
+            <!-- Blockchain verified icon (checkmark in shield) -->
+            <symbol id="icon-verified" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path>
+                <path d="M9 12l2 2 4-4"></path>
+            </symbol>
+            <!-- Copy icon -->
+            <symbol id="icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </symbol>
+            <!-- Hash/fingerprint icon -->
+            <symbol id="icon-hash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="4" y1="9" x2="20" y2="9"></line>
+                <line x1="4" y1="15" x2="20" y2="15"></line>
+                <line x1="10" y1="3" x2="8" y2="21"></line>
+                <line x1="16" y1="3" x2="14" y2="21"></line>
+            </symbol>
         </defs>
     </svg>
     <div class="app">
@@ -341,6 +361,44 @@
                 </div>
             </div>
 
+            <!-- Blockchain Batch Status Panel -->
+            <div class="blockchain-panel" id="blockchain-panel">
+                <div class="blockchain-header">
+                    <div class="blockchain-title">
+                        <svg class="icon" aria-hidden="true">
+                            <use href="#icon-shield"></use>
+                        </svg>
+                        <span>Blockchain Integrity Layer</span>
+                    </div>
+                    <span class="blockchain-mode" id="blockchain-mode">Demo Mode</span>
+                </div>
+                <div class="blockchain-stats">
+                    <div class="blockchain-stat">
+                        <div class="stat-value" id="pending-consents">0</div>
+                        <div class="stat-label">Pending</div>
+                    </div>
+                    <div class="blockchain-stat">
+                        <div class="stat-value" id="anchored-batches">0</div>
+                        <div class="stat-label">Batches</div>
+                    </div>
+                    <div class="blockchain-stat">
+                        <div class="stat-value" id="total-anchored">0</div>
+                        <div class="stat-label">Anchored</div>
+                    </div>
+                </div>
+                <div class="blockchain-actions">
+                    <button id="anchor-batch-btn" class="btn btn-primary btn-small">
+                        <svg class="btn-icon" aria-hidden="true">
+                            <use href="#icon-verified"></use>
+                        </svg>
+                        Anchor Today's Batch
+                    </button>
+                    <button id="view-batches-btn" class="btn btn-secondary btn-small">
+                        View Batches
+                    </button>
+                </div>
+            </div>
+
             <!-- Search and Filters -->
             <div class="search-bar">
                 <div class="search-input-wrapper">
@@ -422,7 +480,8 @@
                     <use href="#icon-alert"></use>
                 </svg></div>
             <h3>Clear All Consents?</h3>
-            <p style="color: black;">This will permanently delete all <span id="clear-count">0</span> tracked consent records. This action
+            <p style="color: black;">This will permanently delete all <span id="clear-count">0</span> tracked consent
+                records. This action
                 cannot be undone.</p>
             <div class="modal-buttons">
                 <button id="cancel-clear" class="btn btn-secondary">Cancel</button>
@@ -440,7 +499,7 @@
             <h3>Export Consent Data</h3>
             <p style="color: black;">Choose your preferred export format:</p>
             <div class="export-options">
-                <button id="export-json" class="export-option"> 
+                <button id="export-json" class="export-option">
                     <svg class="export-option-icon" aria-hidden="true">
                         <use href="#icon-file-text"></use>
                     </svg>
@@ -485,10 +544,81 @@
         </div>
     </div>
 
+    <!-- Verification Modal -->
+    <div id="verify-modal" class="modal-overlay hidden">
+        <div class="modal modal-large">
+            <div class="modal-icon verify-icon"><svg class="icon" aria-hidden="true">
+                    <use href="#icon-verified"></use>
+                </svg></div>
+            <h3>Consent Verification</h3>
+            <div class="verify-content">
+                <div class="verify-status" id="verify-status">
+                    <span class="verify-badge pending">Verifying...</span>
+                </div>
+                <div class="verify-details">
+                    <div class="verify-row">
+                        <span class="verify-label">Consent Hash:</span>
+                        <code class="verify-value" id="verify-hash">-</code>
+                        <button class="copy-btn" data-copy="verify-hash">
+                            <svg class="icon-small" aria-hidden="true">
+                                <use href="#icon-copy"></use>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="verify-row">
+                        <span class="verify-label">Batch Root:</span>
+                        <code class="verify-value" id="verify-root">-</code>
+                    </div>
+                    <div class="verify-row">
+                        <span class="verify-label">Transaction:</span>
+                        <code class="verify-value" id="verify-tx">-</code>
+                    </div>
+                    <div class="verify-row">
+                        <span class="verify-label">Block:</span>
+                        <span class="verify-value" id="verify-block">-</span>
+                    </div>
+                    <div class="verify-row">
+                        <span class="verify-label">Network:</span>
+                        <span class="verify-value" id="verify-network">-</span>
+                    </div>
+                    <div class="verify-row">
+                        <span class="verify-label">Merkle Proof:</span>
+                        <span class="verify-value" id="verify-proof-count">-</span>
+                    </div>
+                </div>
+                <div class="verify-proof-box hidden" id="verify-proof-box">
+                    <h4>Merkle Proof Path</h4>
+                    <div class="proof-list" id="proof-list"></div>
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button id="close-verify" class="btn btn-secondary">Close</button>
+                <button id="show-proof-btn" class="btn btn-primary">Show Proof</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Batches Modal -->
+    <div id="batches-modal" class="modal-overlay hidden">
+        <div class="modal modal-large">
+            <div class="modal-icon"><svg class="icon" aria-hidden="true">
+                    <use href="#icon-database"></use>
+                </svg></div>
+            <h3>Anchored Batches</h3>
+            <p style="color: #586F7C;">Daily consent batches anchored on blockchain</p>
+            <div class="batches-list" id="batches-list">
+                <div class="empty-batches">
+                    <p>No batches anchored yet. Click "Anchor Today's Batch" to create your first anchor.</p>
+                </div>
+            </div>
+            <button id="close-batches" class="btn btn-secondary btn-full">Close</button>
+        </div>
+    </div>
+
     <!-- Toast Container -->
     <div id="toast-container" class="toast-container"></div>
 
-        <script src="dashboard.js"></script>
+    <script src="dashboard.js"></script>
 </body>
 
 </html>
