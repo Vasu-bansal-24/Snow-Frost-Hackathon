@@ -8,15 +8,16 @@ A privacy-focused browser extension that tracks, monitors, and logs user consent
 - **Automatic Consent Detection**: Intelligently monitors and logs consent actions across web pages
 - **Browser Permission Tracking**: Captures and records browser API permission requests (location, notifications, camera, microphone, etc.)
 - **Smart Categorization**: Automatically categorizes consents into:
-  - 🍪 Cookies
-  - 📧 Newsletter/Email
-  - 👤 Account/Registration
-  - 📊 Data Sharing
-  - 📜 Terms & Conditions
-  - 🔔 Notifications
-  - 📍 Location
-  - 🔐 Permissions
-  - 📢 Marketing
+  -  Cookies
+  -  Newsletter
+  -  Account/Registration
+  -  Data Sharing
+  -  Terms & Conditions
+  -  Notifications
+  -  Location
+  -  Permissions
+  -  Marketing
+  -  Email
 
 ### Dashboard & Analytics
 - **Comprehensive Dashboard**: View all tracked consents with filtering and search capabilities
@@ -41,23 +42,6 @@ A privacy-focused browser extension that tracks, monitors, and logs user consent
 - **Browser APIs**: Chrome Extension API, Web Crypto API
 - **Blockchain**: Ethereum/EVM-compatible networks
 - **Storage**: Chrome Local Storage
-
-## 📁 Project Structure
-
-```
-├── manifest.json           # Extension configuration
-├── popup.html/js/css       # Extension popup interface
-├── dashboard.html/js/css   # Full dashboard view
-├── content.js              # Content script for page monitoring
-├── background.js           # Background service worker
-├── inject.js               # Page context script for API interception
-├── blockchain.js           # Blockchain integration service
-├── chatbot-widget.*        # AI chatbot interface (optional)
-├── options.html/js         # Extension settings page
-├── contracts/              # Solidity smart contracts
-├── icons/                  # Extension icons
-└── lib/                    # External libraries
-```
 
 ## 🚀 Installation
 
@@ -147,21 +131,7 @@ Created for the **Snow Frost Hackathon** - A privacy-focused consent tracking so
 
 ## 👥 Authors
 
-- Vasu Bansal ([@Vasu-bansal-24](https://github.com/Vasu-bansal-24))
-
-## 🐛 Known Issues & Future Enhancements
-
-- [ ] Add support for Firefox and other browsers
-- [ ] Implement consent withdrawal tracking
-- [ ] Add GDPR compliance reports
-- [ ] Enhance AI-powered consent analysis
-- [ ] Multi-language support
-- [ ] Cloud backup options (with encryption)
-
-## 📧 Contact
-
-For questions or feedback, please open an issue in the GitHub repository.
-
----
+- Vasu Bansal ([@Vasubansal](https://github.com/Vasu-bansal-24))
+- Yash Gawali ([@Dueyash](https://github.com/Dueyash))
 
 **Note**: This extension is designed to help users track their own consent actions for privacy awareness. It does not interfere with website functionality or automatically accept/reject consents on behalf of the user.
