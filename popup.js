@@ -92,24 +92,31 @@ document.addEventListener('DOMContentLoaded', () => {
     function calculateRisk(consents) {
         if (consents.length === 0) return { level: 'low', label: 'Low' };
 
+        // Weight mapping per category
+        const weights = {
+            cookies: 1,
+            newsletter: 2,
+            email: 4,
+            account: 10,
+            data: 15, // personal data
+            notifications: 1,
+            location: 5,
+            permissions: 3,
+            terms: 6,
+            marketing: 2,
+            general: 1
+        };
+
         let score = 0;
-        const uniqueSites = new Set(consents.map(c => c.domain)).size;
-        score += Math.min(uniqueSites / 5, 2);
 
-        const emailCount = consents.filter(c => c.emailShared).length;
-        score += Math.min(emailCount, 2);
+        for (const consent of consents) {
+            const category = consent.category || 'general';
+            score += weights[category] ?? weights.general;
+        }
 
-        const locationCount = consents.filter(c => c.category === 'location').length;
-        score += Math.min(locationCount * 1.5, 2);
-
-        const permCount = consents.filter(c => c.category === 'permissions').length;
-        score += Math.min(permCount * 1.5, 2);
-
-        const dataCount = consents.filter(c => c.category === 'data').length;
-        score += Math.min(dataCount * 0.5, 2);
-
-        if (score < 3) return { level: 'low', label: 'Low' };
-        if (score < 7) return { level: 'medium', label: 'Medium' };
+        // Thresholds: Low < 30, Medium 30-49, High >= 50
+        if (score < 30) return { level: 'low', label: 'Low' };
+        if (score < 50) return { level: 'medium', label: 'Medium' };
         return { level: 'high', label: 'High' };
     }
 

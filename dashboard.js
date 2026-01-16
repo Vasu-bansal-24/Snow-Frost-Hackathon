@@ -364,44 +364,43 @@ document.addEventListener('DOMContentLoaded', () => {
         const prevEmails = prevWeek.filter(c => c.emailShared).length;
         setDelta('delta-emails', diffLabel(emailsShared, prevEmails));
 
-        // Privacy risk calculation
+        // Privacy risk calculation (weighted by category)
         const riskScore = calculateRiskScore();
-        const riskLabel = riskScore < 3 ? 'Low' : riskScore < 7 ? 'Medium' : 'High';
+        const riskLabel = riskScore < 30 ? 'Low' : riskScore < 50 ? 'Medium' : 'High';
         document.getElementById('stat-risk').textContent = riskLabel;
         setDelta('delta-risk', riskLabel);
 
         riskCard.classList.remove('medium', 'high');
-        if (riskScore >= 3 && riskScore < 7) riskCard.classList.add('medium');
-        if (riskScore >= 7) riskCard.classList.add('high');
+        if (riskScore >= 30 && riskScore < 50) riskCard.classList.add('medium');
+        if (riskScore >= 50) riskCard.classList.add('high');
     }
 
-    // Calculate privacy risk score (0-10)
+    // Calculate privacy risk score (weighted sum across permissions)
     function calculateRiskScore() {
         if (allConsents.length === 0) return 0;
+        // Weight mapping per category
+        const weights = {
+            cookies: 1,
+            newsletter: 2,
+            email: 4,
+            account: 10,
+            data: 15, // personal data
+            notifications: 1,
+            location: 5,
+            permissions: 3,
+            terms: 6,
+            marketing: 2,
+            general: 1
+        };
 
         let score = 0;
-        const uniqueSites = new Set(allConsents.map(c => c.domain)).size;
 
-        // More sites = higher risk
-        score += Math.min(uniqueSites / 5, 2);
+        for (const consent of allConsents) {
+            const category = consent.category || 'general';
+            score += weights[category] ?? weights.general;
+        }
 
-        // Emails shared
-        const emailCount = allConsents.filter(c => c.emailShared).length;
-        score += Math.min(emailCount, 2);
-
-        // Location permissions
-        const locationCount = allConsents.filter(c => c.category === 'location').length;
-        score += Math.min(locationCount * 1.5, 2);
-
-        // Camera/mic permissions
-        const permCount = allConsents.filter(c => c.category === 'permissions').length;
-        score += Math.min(permCount * 1.5, 2);
-
-        // Data sharing
-        const dataCount = allConsents.filter(c => c.category === 'data').length;
-        score += Math.min(dataCount * 0.5, 2);
-
-        return Math.min(Math.round(score), 10);
+        return score;
     }
 
     // Update top sites

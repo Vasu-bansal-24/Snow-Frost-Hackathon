@@ -418,30 +418,36 @@
     }
   }
 
-  // Add message to chat
-  function addMessage(text, sender = 'user') {
-    const messagesContainer = document.getElementById('chatbot-messages');
-    if (!messagesContainer) return;
+// Add message to chat (updated for HTML support)
+function addMessage(text, sender = 'user') {
+  const messagesContainer = document.getElementById('chatbot-messages');
+  if (!messagesContainer) return;
 
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `chatbot-message ${sender}`;
+  const messageDiv = document.createElement('div');
+  messageDiv.className = `chatbot-message ${sender}`;
 
-    const contentDiv = document.createElement('div');
-    contentDiv.className = 'chatbot-message-content';
-    contentDiv.textContent = text;
-
-    messageDiv.appendChild(contentDiv);
-    messagesContainer.appendChild(messageDiv);
-
-    // Scroll to bottom
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-
-    // Store in history
-    chatHistory.push({
-      role: sender === 'user' ? 'user' : 'assistant',
-      content: text
-    });
+  const contentDiv = document.createElement('div');
+  contentDiv.className = 'chatbot-message-content';
+  
+  // Use innerHTML for bot messages (to render formatting)
+  if (sender === 'bot') {
+    contentDiv.innerHTML = text;
+  } else {
+    contentDiv.textContent = text; // User messages stay as plain text
   }
+
+  messageDiv.appendChild(contentDiv);
+  messagesContainer.appendChild(messageDiv);
+
+  // Scroll to bottom
+  messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+  // Store in history (store original text, not HTML)
+  chatHistory.push({
+    role: sender === 'user' ? 'user' : 'assistant',
+    content: text.replace(/<[^>]*>/g, '') // Store plain text version
+  });
+}
 
   // Show loading indicator
   function showLoadingIndicator() {
@@ -481,7 +487,36 @@
       }, 5000);
     }
   }
-
+// Function to format Gemini responses with proper HTML
+function formatGeminiResponse(text) {
+  // If text is short, just return it
+  if (text.length < 100) return text;
+  
+  let formatted = text;
+  
+  // 1. Fix numbered lists (like "1. **Purpose**" becomes proper list)
+  formatted = formatted.replace(/^(\d+\.\s+)/gm, '<br>$1');
+  
+  // 2. Fix bullet points (ensure they're on new lines)
+  formatted = formatted.replace(/^(\*\s+)/gm, '<br>• ');
+  formatted = formatted.replace(/^(-\s+)/gm, '<br>• ');
+  
+  // 3. Add paragraph breaks for long sections
+  formatted = formatted.replace(/\n\n+/g, '</p><p>');
+  formatted = formatted.replace(/\n/g, '<br>');
+  
+  // 4. Wrap in paragraph tags
+  formatted = '<p>' + formatted + '</p>';
+  
+  // 5. Make bold text stand out (for markdown-style **bold**)
+  formatted = formatted.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  
+  // 6. Fix headers (like "Key Definitions:")
+  formatted = formatted.replace(/^([A-Z][a-z]+ [A-Z][a-z]+:)/gm, '<br><strong>$1</strong><br>');
+  formatted = formatted.replace(/^([A-Z][a-z]+:)/gm, '<br><strong>$1</strong><br>');
+  
+  return formatted;
+}
 // Send message to Gemini API
 async function sendMessage() {
   if (isWaitingForResponse) return;
@@ -555,28 +590,24 @@ async function sendMessage() {
       throw new Error(errorData.error?.message || `HTTP ${response.status}: ${response.statusText}`);
     }
 
-    const data = await response.json();
-    console.log('Gemini API response:', data);
+  // In your sendMessage() function, after getting the response:
+// After getting the response:
+const data = await response.json();
+removeLoadingIndicator();
 
-    removeLoadingIndicator();
+// Extract the text
+let botMessage = '';
+if (data.candidates?.[0]?.content?.parts?.[0]?.text) {
+  botMessage = data.candidates[0].content.parts[0].text;
+} else if (data.error) {
+  botMessage = `Error: ${data.error.message}`;
+} else {
+  botMessage = 'No response received.';
+}
 
-    // Parse Gemini response
-    let botMessage = '';
-    
-    if (data.candidates && data.candidates.length > 0) {
-      const candidate = data.candidates[0];
-      if (candidate.content && candidate.content.parts && candidate.content.parts.length > 0) {
-        botMessage = candidate.content.parts[0].text || '';
-      }
-    }
-
-    if (botMessage) {
-      addMessage(botMessage, 'bot');
-    } else {
-      console.warn('No valid response from Gemini:', data);
-      throw new Error('No response text received from Gemini API');
-    }
-
+// Format the message before displaying
+const formattedMessage = formatGeminiResponse(botMessage);
+addMessage(formattedMessage, 'bot');  
   } catch (error) {
     removeLoadingIndicator();
     console.error('Chatbot error:', error);
