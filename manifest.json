@@ -21,7 +21,8 @@
                 "<all_urls>"
             ],
             "js": [
-                "content.js"
+                "content.js",
+                "chatbot-widget.js"
             ],
             "run_at": "document_start"
         }
@@ -29,7 +30,8 @@
     "web_accessible_resources": [
         {
             "resources": [
-                "inject.js"
+                "inject.js",
+                "chatbot-widget.css"
             ],
             "matches": [
                 "<all_urls>"
@@ -49,5 +51,6 @@
         "16": "icons/icon16.png",
         "48": "icons/icon48.png",
         "128": "icons/icon128.png"
-    }
+    },
+    "options_page": "options.html"
 }
