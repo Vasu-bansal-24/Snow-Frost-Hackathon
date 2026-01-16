@@ -1,8 +1,8 @@
-# Consent Tracker Browser Extension 🔒
+# Consent Tracker Browser Extension 
 
 A privacy-focused browser extension that tracks, monitors, and logs user consent actions across websites, including cookie acceptance, newsletter subscriptions, browser permissions, and more. Built with blockchain integration for immutable consent records.
 
-## 🌟 Features
+##  Features
 
 ### Core Functionality
 - **Automatic Consent Detection**: Intelligently monitors and logs consent actions across web pages
@@ -36,14 +36,14 @@ A privacy-focused browser extension that tracks, monitors, and logs user consent
 - **Simulated Mode**: Test blockchain features without real transactions
 - **Smart Contract Integration**: Store consent proofs on-chain using Solidity contracts
 
-## 🛠️ Technology Stack
+##  Technology Stack
 
 - **Languages**: JavaScript (51.4%), HTML (23.6%), CSS (19.7%), Solidity (5.3%)
 - **Browser APIs**: Chrome Extension API, Web Crypto API
-- **Blockchain**: Ethereum/EVM-compatible networks
+- **Blockchain**: Polygon
 - **Storage**: Chrome Local Storage
 
-## 🚀 Installation
+##  Installation
 
 ### From Source
 
@@ -61,7 +61,7 @@ cd Snow-Frost-Hackathon
 
 3. The extension icon should appear in your browser toolbar
 
-## 💡 Usage
+##  Usage
 
 ### Basic Usage
 
@@ -95,7 +95,7 @@ To enable blockchain anchoring:
 3. Enable automatic anchoring or manually anchor consent batches
 4. View transaction hashes and verification status in the dashboard
 
-## 🔧 Configuration
+##  Configuration
 
 Access extension settings via the options page:
 - Configure blockchain network settings
@@ -103,7 +103,7 @@ Access extension settings via the options page:
 - Enable/disable automatic anchoring
 - Configure API keys (for AI chatbot feature)
 
-## 📊 Privacy & Security
+##  Privacy & Security
 
 - **Local Storage**: All consent data is stored locally in your browser
 - **No Tracking**: The extension does not send data to external servers
@@ -111,7 +111,7 @@ Access extension settings via the options page:
 - **Blockchain Verification**: Optional immutable proof of consent on blockchain
 - **User Control**: Full control over data with export and clear options
 
-## 🤝 Contributing
+##  Contributing
 
 This project was created for the Snow Frost Hackathon. Contributions are welcome!
 
@@ -121,15 +121,15 @@ This project was created for the Snow Frost Hackathon. Contributions are welcome
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📝 License
+##  License
 
 This project is open source and available for hackathon demonstration purposes.
 
-## 🏆 Hackathon
+##  Hackathon
 
 Created for the **Snow Frost Hackathon** - A privacy-focused consent tracking solution with blockchain integration.
 
-## 👥 Authors
+##  Authors
 
 - Vasu Bansal ([@Vasubansal](https://github.com/Vasu-bansal-24))
 - Yash Gawali ([@Dueyash](https://github.com/Dueyash))
