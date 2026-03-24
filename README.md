@@ -1,137 +1,132 @@
-# Consent Tracker Browser Extension 
+hehe
+# Consent Tracker (Snow Frost Hackathon)
 
-A privacy-focused browser extension that tracks, monitors, and logs user consent actions across websites, including cookie acceptance, newsletter subscriptions, browser permissions, and more. Built with blockchain integration for immutable consent records.
+Consent Tracker is a Chrome extension that logs user consent interactions (cookie prompts, newsletter signups, browser permission grants, etc.), categorizes them, and presents them in a searchable dashboard.
 
-##  Features
+It also supports daily batch anchoring with Merkle roots for tamper-evident proof trails, and includes an optional Gemini-powered AI chatbot widget.
 
-### Core Functionality
-- **Automatic Consent Detection**: Intelligently monitors and logs consent actions across web pages
-- **Browser Permission Tracking**: Captures and records browser API permission requests (location, notifications, camera, microphone, etc.)
-- **Smart Categorization**: Automatically categorizes consents into:
-  -  Cookies
-  -  Newsletter
-  -  Account/Registration
-  -  Data Sharing
-  -  Terms & Conditions
-  -  Notifications
-  -  Location
-  -  Permissions
-  -  Marketing
-  -  Email
+## What it does
 
-### Dashboard & Analytics
-- **Comprehensive Dashboard**: View all tracked consents with filtering and search capabilities
-- **Privacy Risk Assessment**: Real-time privacy risk level indicator
-- **Statistics & Insights**: Track consent trends by date, category, and website
-- **Visual Feedback**: On-page notifications when consent actions are detected
+- Detects consent-like clicks and form submissions directly on visited pages
+- Tracks browser permission grants (geolocation, notifications, camera, microphone)
+- Categorizes events (cookies, newsletter, email, account, terms, marketing, etc.)
+- Stores consent logs locally in extension storage
+- Shows popup metrics (total consents, today count, unique sites, risk level)
+- Provides a full dashboard with filtering, search, export, and retention controls
+- Anchors daily consent batches using Merkle roots (simulated mode by default)
 
-### Data Management
-- **Export Options**: Export consent records in JSON or CSV format
-- **Search & Filter**: Advanced filtering by date, category, and website
-- **Clear History**: Option to remove all tracked consents
+## How it works
 
-### Blockchain Integration
-- **Immutable Records**: Anchor consent data to blockchain for tamper-proof verification
-- **Proof Generation**: Create cryptographic hashes for each consent action
-- **Simulated Mode**: Test blockchain features without real transactions
-- **Smart Contract Integration**: Store consent proofs on-chain using Solidity contracts
+1. `content.js` monitors page interactions and classifies consent events.
+2. `inject.js` is injected into page context to intercept browser permission APIs.
+3. Events are sent to `background.js` and saved to `chrome.storage.local`.
+4. `blockchain.js` hashes consent data, batches events by UTC day, builds a Merkle tree, and anchors batch metadata.
+5. `popup.html` / `popup.js` shows quick stats; `dashboard.html` / `dashboard.js` provides deep analysis and controls.
 
-##  Technology Stack
+## Project structure
 
-- **Languages**: JavaScript (51.4%), HTML (23.6%), CSS (19.7%), Solidity (5.3%)
-- **Browser APIs**: Chrome Extension API, Web Crypto API
-- **Blockchain**: Polygon
-- **Storage**: Chrome Local Storage
+- `manifest.json` — Extension manifest (MV3)
+- `background.js` — Service worker, consent storage, batch anchoring orchestration
+- `content.js` — Consent detection and logging from page interactions
+- `inject.js` — Browser permission interception (runs in page context)
+- `blockchain.js` — Batch hashing, Merkle root anchoring, verification helpers
+- `lib/merkleTree.js` — Local Merkle tree/proof utilities
+- `dashboard.html`, `dashboard.js`, `dashboard.css` — Main UI and analytics
+- `popup.html`, `popup.js` — Toolbar popup summary
+- `options.html`, `options.js` — Gemini API settings for chatbot
+- `chatbot-widget.js`, `chatbot-widget.css`, `chatbot-widget.html` — AI assistant widget
+- `contracts/ConsentAnchor.sol` — Solidity contract for batch anchor storage
 
-##  Installation
-
-### From Source
+## Installation (Chrome)
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/Vasu-bansal-24/Snow-Frost-Hackathon.git
 cd Snow-Frost-Hackathon
 ```
 
-2. Load the extension in Chrome:
-   - Open Chrome and navigate to `chrome://extensions/`
-   - Enable "Developer mode" (toggle in top right)
-   - Click "Load unpacked"
-   - Select the project directory
+2. Open `chrome://extensions/`.
+3. Enable **Developer mode**.
+4. Click **Load unpacked** and select this project folder.
+5. Pin **Consent Tracker** from the extension toolbar (optional but recommended).
 
-3. The extension icon should appear in your browser toolbar
+## Usage
 
-##  Usage
+### 1) Track consent activity
 
-### Basic Usage
+- Browse websites normally.
+- When you click consent-like actions (accept/allow/agree/subscribe/etc.), they are logged automatically.
+- You will see on-page feedback when a consent is captured.
 
-1. **Click the extension icon** to view the popup with:
-   - Total consent count
-   - Number of unique sites
-   - Today's consent count
-   - Privacy risk level
-   - Recent consent activity
+### 2) Check quick stats in popup
 
-2. **Browse the web** - The extension automatically detects and logs:
-   - Cookie consent banners
-   - Newsletter subscriptions
-   - Browser permission requests
-   - Form submissions with consent implications
-   - Terms & conditions acceptance
+- Click the extension icon to view:
+  - Total consents
+  - Unique sites
+  - Today’s consents
+  - Privacy risk indicator
+  - Recent activity
 
-3. **Open the Dashboard** - Click "Open Dashboard" for:
-   - Complete consent history
-   - Advanced filtering and search
-   - Statistics and analytics
-   - Export functionality
-   - Blockchain verification status
+### 3) Use dashboard for full history
 
-### Blockchain Features
+- Open dashboard from popup.
+- Filter by category/date, search by domain/content, and inspect detailed records.
+- Export data as JSON or CSV.
+- Clear history when needed.
 
-To enable blockchain anchoring:
+### 4) Blockchain batch anchoring
 
-1. Configure your blockchain settings in the extension options
-2. Set your preferred network (Ethereum, Polygon, etc.)
-3. Enable automatic anchoring or manually anchor consent batches
-4. View transaction hashes and verification status in the dashboard
+- Use **Anchor Today’s Batch** in the dashboard blockchain panel.
+- Each anchored batch stores:
+  - Merkle root
+  - Storage pointer hash
+  - Day timestamp
+  - Batch size
+  - Tx hash / block metadata
 
-##  Configuration
+> Note: The extension currently runs in **simulated blockchain mode** by default (`blockchain.js`). Real-chain anchoring requires additional wallet/provider wiring and deployed contract configuration.
 
-Access extension settings via the options page:
-- Configure blockchain network settings
-- Set smart contract addresses
-- Enable/disable automatic anchoring
-- Configure API keys (for AI chatbot feature)
+### 5) Optional AI chatbot
 
-##  Privacy & Security
+- Open extension options page.
+- Add your Gemini API key and model settings.
+- Visit any site and use the floating chat button (`💬`).
 
-- **Local Storage**: All consent data is stored locally in your browser
-- **No Tracking**: The extension does not send data to external servers
-- **Cryptographic Hashing**: Each consent generates a unique hash for verification
-- **Blockchain Verification**: Optional immutable proof of consent on blockchain
-- **User Control**: Full control over data with export and clear options
+## Data and privacy
 
-##  Contributing
+- Consent logs are stored in `chrome.storage.local`.
+- Chatbot settings are stored in `chrome.storage.sync`.
+- No backend server is included in this repository for consent log ingestion.
+- Chatbot requests are sent to Google Generative Language API only when you use the chatbot and provide an API key.
 
-This project was created for the Snow Frost Hackathon. Contributions are welcome!
+## Permissions used
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+- `storage` — Persist consent logs/settings
+- `activeTab`, `tabs` — Open dashboard/options and interact with current tab context
+- `alarms` — Trigger scheduled daily batch anchoring checks
+- `host_permissions: <all_urls>` — Monitor consent interactions across sites
 
-##  License
+## Smart contract
 
-This project is open source and available for hackathon demonstration purposes.
+`contracts/ConsentAnchor.sol` implements:
 
-##  Hackathon
+- Batch anchoring by Merkle root
+- Batch lookup by user/day
+- Anchor existence checks
+- Signature-based anchor flow (`anchorBatchWithSignature`)
 
-Created for the **Snow Frost Hackathon** - A privacy-focused consent tracking solution with blockchain integration.
+Deploy this contract separately if you want true on-chain anchoring.
 
-##  Authors
+## Current limitations
 
-- Vasu Bansal ([@Vasubansal](https://github.com/Vasu-bansal-24))
-- Yash Gawali ([@Dueyash](https://github.com/Dueyash))
+- Keyword-based detection can miss custom/non-standard consent UX flows.
+- Real on-chain mode is not fully wired in extension runtime by default.
+- No automated test suite is included yet.
 
-**Note**: This extension is designed to help users track their own consent actions for privacy awareness. It does not interfere with website functionality or automatically accept/reject consents on behalf of the user.
+## Team
+
+- Vasu Bansal — https://github.com/Vasu-bansal-24
+- Yash Gawali — https://github.com/Dueyash
+
+Built for Snow Frost Hackathon.
